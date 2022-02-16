@@ -1,5 +1,5 @@
-.dropbox {
-  display: relative;
+.dropdown {
+  position: relative;
   z-index: 99;
 }
 .dropdown__toggle {
@@ -29,7 +29,6 @@
 .dropdown__content {
   /* display: none; */
   position: absolute;
-  top: cal(100% + 5px);
   right: 0;
   width: max-content;
   max-width: 400px;
@@ -40,25 +39,13 @@
   /* Transform info */
   transform-origin: top right;
   transform: scale(0);
-  transition: transform 0.3 ease 0s;
+  transition: transform 0.3s ease 0s;
 }
 .dropdown__content.active {
   transform: scale(1);
-  transition: transform 0.5 var(--transform-cubic);
+  transition: transform 0.5s var(--transition-cubic);
 }
 .dropdown__content-footer {
   padding: 20px;
   text-align: center;
-}
-.notification-item {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-}
-.notification-item:hover {
-  background-color: var(--second-bg);
-}
-.notification-item > i {
-  margin-right: 20px;
-  font-size: 1.5rem;
 }

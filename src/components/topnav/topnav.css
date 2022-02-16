@@ -30,9 +30,35 @@
 .top-nav__right {
   display: flex;
   align-items: center;
-  padding: 20px;
 }
 
 .top-nav__right-item ~ .top-nav__right-item {
   margin-left: 30px;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+.notification-item:hover {
+  background-color: var(--second-bg);
+}
+.notification-item > i {
+  margin-right: 20px;
+  font-size: 1.5rem;
+}
+
+.top-nav__right-user {
+  display: flex;
+  align-items: center;
+}
+.top-nav__right-user__image img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.top-nav__right-user__name {
+  font-size: 1rem;
+  font-weight: 600;
 }
