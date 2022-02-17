@@ -9,7 +9,9 @@
   z-index: 1;
   overflow: hidden;
   transition: color 0.5s ease 0s;
+  /* margin status card */
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 .status-card__icon {
   display: flex;
