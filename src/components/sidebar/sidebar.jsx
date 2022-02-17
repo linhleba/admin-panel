@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './sidebar.css';
-import logo from '../../assets/images/logo.png';
+// import logo from '../../assets/images/logo.png';
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json';
 
+const logo = '';
 const SidebarItem = (props) => {
   const active = props.active ? 'active' : '';
   // console.log('active is', active);
@@ -25,7 +26,7 @@ const sidebar = (props) => {
   return (
     <div className="sidebar">
       <div className="sidebar__logo">
-        <img src="{logo}" alt="web logo" />
+        <img src={logo} alt="web logo" />
       </div>
       {sidebar_items.map((obj, key) => (
         <Link to={obj.route} key={key}>

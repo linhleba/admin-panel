@@ -6,7 +6,7 @@ import Dashboard from '../pages/Dashboard';
 const Routes = () => {
   return (
     <Switch>
-      <Route path="/customer" component={Customer} />
+      <Route path="/customers" component={Customer} />
       <Route path="/" exact component={Dashboard} />
     </Switch>
   );
