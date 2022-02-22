@@ -4,6 +4,7 @@ import DropDown from '../dropdown/dropdown';
 import notifications from '../../assets/JsonData/notification.json';
 import user_menus from '../../assets/JsonData/user_menus.json';
 import { Link } from 'react-router-dom';
+import ThemeMenu from '../thememenu/ThemeMenu';
 
 const displayNotificationData = (object, index) => (
   <div key={index} className="notification-item">
@@ -64,8 +65,9 @@ const TopNav = () => {
           />
         </div>
         <div className="top-nav__right-item">
-          <DropDown />
+          {/* <DropDown /> */}
           {/* theme setting */}
+          <ThemeMenu />
         </div>
       </div>
     </div>
