@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './table.css';
+import AdditionArea from '../additionarea/AdditionArea';
+import PopUp from '../popup/PopUp';
 
 const Table = (props) => {
   // Use slice to limit data which display in every page
@@ -24,7 +26,7 @@ const Table = (props) => {
     setCurrentPage(page + 1);
   };
   return (
-    <div>
+    <div className="table">
       <div className="table-wrapper">
         <table>
           {props.headData && props.renderHead ? (
