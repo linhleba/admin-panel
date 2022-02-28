@@ -7,14 +7,29 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setValues({
       ...values,
       [name]: value,
     });
+    // validate while changing input
     if (validateOnChange) validate({ [name]: value });
   };
 
+  const handleAutoCompleteChange = (e, vals) => {
+    const id = e.target.id.split('-');
+    // format id: categories-option-0 => get the first value
+    const name = id[0];
+    setValues({
+      ...values,
+      [name]: vals,
+    });
+    // validate while changing input
+    // if (validateOnChange) validate({ [name]: vals });
+  };
+
   const resetForm = () => {
+    // set the initial values and no errors
     setValues(initialFValues);
     setErrors({});
   };
@@ -25,6 +40,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     errors,
     setErrors,
     handleInputChange,
+    handleAutoCompleteChange,
     resetForm,
   };
 }

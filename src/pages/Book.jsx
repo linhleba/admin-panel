@@ -3,8 +3,9 @@ import Table from '../components/table/Table';
 import callAPI from '../utils/apiCaller';
 import BookForm from '../components/Books/BookForm';
 import PopUp from '../components/popup/PopUp';
+import * as BookService from '../services/bookService';
 
-const productTableHead = [
+const bookTableHead = [
   'Id',
   'Tên sách',
   'Thể loại',
@@ -28,13 +29,14 @@ const renderBody = (item, index) => (
   </tr>
 );
 
-const Product = () => {
+const Book = () => {
   let [books, setBooks] = useState(undefined);
   const [openPopup, setOpenPopup] = useState(false);
   const openInPopup = (item) => {
     // setRecordForEdit(item);
     setOpenPopup(true);
   };
+  // Use useEffect to set it for displaying on the table
   useEffect(() => {
     // let mounted = true;
     callAPI('api/book', 'GET', null).then((response) => {
@@ -43,15 +45,17 @@ const Product = () => {
     });
     // return () => (mounted = false);
   }, []);
-  // const apiCaller = callAPI('api/book', 'GET', null).then((response) => {
-  //   // get data from call api
-  //   setBooks(response.data);
-  //   console.log('abc', books);
-  // });
-  // const { addOrEdit, recordForEdit } = props;
+
+  const handleInfo = (books, resetForm) => {
+    // if (books.id == 0) employeeService.insertEmployee(employee);
+    // else employeeService.updateEmployee(employee);
+    // reset form after update books into data
+    BookService.postBookAPI(books);
+    resetForm();
+  };
   return (
     <div>
-      <h2 className="page-header">Sản phẩm</h2>
+      <h2 className="page-header">Quản lí sách</h2>
       <div className="row">
         <div className="col-12">
           <div className="card">
@@ -70,12 +74,12 @@ const Product = () => {
               }
 
               <PopUp title="Thêm sản phẩm" openPopup={openPopup}>
-                <BookForm />
+                <BookForm handleInfo={handleInfo} />
               </PopUp>
               {books && (
                 <Table
                   limit="5"
-                  headData={productTableHead}
+                  headData={bookTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
                   bodyData={books}
                   renderBody={(item, index) => renderBody(item, index)}
@@ -91,7 +95,7 @@ const Product = () => {
 
               {/* <Table
                   limit="5"
-                  headData={productTableHead}
+                  headData={bookTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
                   bodyData={books}
                   renderBody={(item, index) => renderBody(item, index)}
@@ -104,4 +108,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default Book;
