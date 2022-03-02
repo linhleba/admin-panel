@@ -1,20 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './table.css';
 import AdditionArea from '../additionarea/AdditionArea';
 import PopUp from '../popup/PopUp';
+import Control from '../controls/Controls';
 
 const Table = (props) => {
-  // Use slice to limit data which display in every page
-  const sliceData =
-    props.limit && props.bodyData
-      ? props.bodyData.slice(0, props.limit)
-      : props.bodyData;
+  /* 
+    Searching in table
+    1. Check isSearch is valid or not to display div tag & function search
+    Flows in search 
+    1. On change event executed when we edit the value in input tag
+    => Set Q as value of input
+    2. When q changes => UsedEffect based on q is executed
+    => func searchData will check isSearch props and filter data (input: bodyData) based on q
+    => Set Alldata as returning value of above func 
+    3. When Alldata changes => update sliceData props which displayed data on every page
+  */
 
+  // Declare allData to handle and change while searching
+  let [allData, setAllData] = useState(props.bodyData);
+  console.log(allData);
+
+  const [sliceData, setSliceData] = useState(
+    props.limit && allData ? allData.slice(0, props.limit) : allData,
+  );
+  // Update sliceData based on allData
+  useEffect(() => {
+    setSliceData(
+      props.limit && allData ? allData.slice(0, props.limit) : allData,
+    );
+  }, [allData]);
+
+  // data is shown in each page
   let [dataShow, setDataShow] = useState(sliceData);
+  // Update DataShow in table when SliceData change
+  useEffect(() => {
+    setDataShow(sliceData);
+  }, [sliceData]);
   let maxPage = 1;
   let range = [];
   if (props.limit !== undefined) {
-    maxPage = Math.ceil(props.bodyData.length / Number(props.limit));
+    maxPage = Math.ceil(allData.length / Number(props.limit));
     range = [...Array(maxPage).keys()];
   }
   let [currentPage, setCurrentPage] = useState(1);
@@ -22,11 +48,62 @@ const Table = (props) => {
   const selectPage = (page) => {
     const start = Number(props.limit) * page;
     const end = start + Number(props.limit);
-    setDataShow(props.bodyData.slice(start, end));
+    // set data is between start and end in each page
+    setDataShow(allData.slice(start, end));
     setCurrentPage(page + 1);
   };
+  // set State search in table
+  let [q, setQ] = useState('');
+  const [searchColumns, setSearchColumns] = useState(['name']);
+  // let [sortData, setSortData] = useState(allData);
+  // function for searching
+  const searchData = () => {
+    // Stop using func if isSearch is not declared
+    // prevent for missing 'name' which declared by searchColumns prop above
+    if (props.isSearch) {
+      const result = props.bodyData.filter((row) =>
+        searchColumns.some((column) => {
+          // console.log(
+          //   'gia tri cua' +
+          //     row[column] +
+          //     'la' +
+          //     row[column].toString().toLowerCase().indexOf(q.toLowerCase()),
+          // );
+          return (
+            row[column].toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+          );
+        }),
+      );
+      setAllData(result);
+    }
+    // console.log('gia tri abc la', abc);
+    // console.log('gia tri', allData);
+  };
+  useEffect(() => {
+    // console.log('chay vo nay');
+    searchData();
+  }, [q]);
+  // useEffect(() => {
+  //   setAllData(sortData);
+  //   // setDataShow(sliceData);
+  // }, [sortData]);
+
   return (
     <div className="table">
+      {props.isSearch && (
+        <div>
+          <Control.Input
+            name="search"
+            label="Tìm kiếm"
+            type="text"
+            variant="standard"
+            value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+            }}
+          />
+        </div>
+      )}
       <div className="table-wrapper">
         <table>
           {props.headData && props.renderHead ? (
@@ -38,7 +115,7 @@ const Table = (props) => {
               </tr>
             </thead>
           ) : null}
-          {props.bodyData && props.renderBody ? (
+          {allData && props.renderBody ? (
             <tbody>
               {dataShow.map((item, index) => props.renderBody(item, index))}
             </tbody>

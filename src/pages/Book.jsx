@@ -20,8 +20,8 @@ const renderBody = (item, index) => (
   <tr key={index}>
     <td>{item.id}</td>
     <td>{item.name}</td>
-    <td>{item.category.map((item) => item.name)}</td>
-    <td>{item.author.map((item) => item.name)}</td>
+    <td>{item.category.map((item) => `${item.name} `)}</td>
+    <td>{item.author.map((item) => `${item.name} `)}</td>
     <td>{item.quantity}</td>
     <td>{item.price}</td>
     {/* <td>{item.location}</td>
@@ -46,12 +46,17 @@ const Book = () => {
     // return () => (mounted = false);
   }, []);
 
-  const handleInfo = (books, resetForm) => {
+  const handleInfo = (dataBooks, resetForm) => {
     // if (books.id == 0) employeeService.insertEmployee(employee);
     // else employeeService.updateEmployee(employee);
     // reset form after update books into data
-    BookService.postBookAPI(books);
+    BookService.postBookAPI(dataBooks);
     resetForm();
+    // format info from dataBooks
+    // callAPI('api/book', 'GET', null).then((response) => {
+    //   // get data from call api
+    //   setBooks(response.data);
+    // });
   };
   return (
     <div>
@@ -73,7 +78,11 @@ const Book = () => {
                 </div>
               }
 
-              <PopUp title="Thêm sản phẩm" openPopup={openPopup}>
+              <PopUp
+                title="Thêm sản phẩm"
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+              >
                 <BookForm handleInfo={handleInfo} />
               </PopUp>
               {books && (
@@ -84,6 +93,7 @@ const Book = () => {
                   bodyData={books}
                   renderBody={(item, index) => renderBody(item, index)}
                   activeButton="true"
+                  isSearch="true"
                 />
               )}
 

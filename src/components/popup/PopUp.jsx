@@ -36,7 +36,7 @@ const PopUp = (props) => {
             {title}
           </Typography>
           <Controls.ActionButton
-            color="secondary"
+            color="main"
             onClick={() => {
               setOpenPopup(false);
             }}
