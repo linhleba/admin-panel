@@ -46,11 +46,86 @@ const Book = () => {
     // return () => (mounted = false);
   }, []);
 
-  const handleInfo = (dataBooks, resetForm) => {
+  const [dataCategory, setDataCategory] = useState([]);
+  var idCategory;
+
+  const [data, setData] = useState('');
+  const [reset, setReset] = useState('');
+
+  // const handleInfo = (dataBooks, resetForm) => {
+  //   setData(dataBooks);
+  //   setReset(resetForm);
+  // };
+
+  // useEffect(() => {
+  //   async function handleBook() {
+  //     // if (books.id == 0) employeeService.insertEmployee(employee);
+  //     // else employeeService.updateEmployee(employee);
+  //     // Handle author and categories are not stored in the database
+  //     data.categories.map(async (item) => {
+  //       if (item.id === undefined) {
+  //         // console.log(BookService.postCategoryAPI(item));'
+  //         let id = await BookService.postCategoryAPI(item);
+  //         setDataCategory(...dataCategory, id);
+  //       } else {
+  //         setDataCategory(...dataCategory, item.id);
+  //       }
+  //     });
+  //     // console.log('mang categories la', dataCategory);
+
+  //     data.authors.map((item) => {});
+
+  //     // console.log('du lieu hien tai', data);
+  //     BookService.postBookAPI(data);
+  //     // reset form after update books into data
+  //     reset();
+  //     // format info from data
+  //     // callAPI('api/book', 'GET', null).then((response) => {
+  //     //   // get data from call api
+  //     //   setBooks(response.data);
+  //     // });
+  //   }
+  //   handleBook();
+  // }, [data]);
+
+  // useEffect(() => {
+  //   console.log('vao trong nay', idCategory);
+  //   setDataCategory(...dataCategory, idCategory);
+  //   async function yes() {
+  //     await BookService.postBookAPI(idCategory);
+  //   }
+  //   yes();
+  // }, [idCategory]);
+
+  const handleInfo = async (dataBooks, resetForm) => {
     // if (books.id == 0) employeeService.insertEmployee(employee);
     // else employeeService.updateEmployee(employee);
+    // Handle author and categories are not stored in the database
+    //  handle await before continuing
+    await Promise.all(
+      dataBooks.categories.map(async (item) => {
+        if (item.id === undefined) {
+          item.id = await BookService.postCategoryAPI(item);
+        } else {
+          // setDataCategory(...dataCategory, item.id);
+        }
+      }),
+    );
+    // console.log('mang categories la', dataCategory);
+
+    console.log('data book author', dataBooks);
+    await Promise.all(
+      dataBooks.authors.map(async (item) => {
+        if (item.id === undefined) {
+          // console.log(BookService.postCategoryAPI(item));'
+          item.id = await BookService.postAuthorAPI(item);
+        }
+      }),
+    );
+
+    // console.log('du lieu hien tai', dataBooks);
+    await BookService.postBookAPI(dataBooks);
     // reset form after update books into data
-    BookService.postBookAPI(dataBooks);
     resetForm();
     // format info from dataBooks
     // callAPI('api/book', 'GET', null).then((response) => {

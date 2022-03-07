@@ -5,6 +5,7 @@ import { useForm, Form } from '../../components/useForm/useForm';
 // import * as employeeService from '../../services/employeeService';
 import { Autocomplete } from '@material-ui/lab';
 import callAPI from '../../utils/apiCaller';
+import Creatable, { useCreatable } from 'react-select/creatable';
 
 const initialFValues = {
   name: '',
@@ -59,6 +60,7 @@ const BookForm = (props) => {
     setErrors,
     handleInputChange,
     handleAutoCompleteChange,
+    handleCreatableInput,
     resetForm,
   } = useForm(initialFValues, true, validate);
 
@@ -105,7 +107,39 @@ const BookForm = (props) => {
             onChange={handleInputChange}
             error={errors.name}
           />
-          <Autocomplete
+          <Creatable
+            isMulti
+            name="categories"
+            placeholder="Thể loại"
+            formatCreateLabel={(inputText) => `Thêm mới "${inputText}"`}
+            options={categoriesItems}
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option}
+            getNewOptionData={(inputValue, optionLabel) => ({
+              id: undefined,
+              name: optionLabel,
+            })}
+            value={values.categories}
+            error={errors.categories}
+            onChange={handleCreatableInput}
+          />
+          <Creatable
+            isMulti
+            name="authors"
+            placeholder="Tác giả"
+            formatCreateLabel={(inputText) => `Thêm mới "${inputText}"`}
+            options={authorsItems}
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option}
+            getNewOptionData={(inputValue, optionLabel) => ({
+              id: undefined,
+              name: optionLabel,
+            })}
+            value={values.authors}
+            error={errors.authors}
+            onChange={handleCreatableInput}
+          />
+          {/* <Autocomplete
             multiple
             id="categories"
             name="categories"
@@ -141,7 +175,7 @@ const BookForm = (props) => {
                 margin="normal"
               />
             )}
-          />
+          /> */}
 
           <Controls.Input
             name="quantity"

@@ -28,6 +28,20 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     // if (validateOnChange) validate({ [name]: vals });
   };
 
+  const handleCreatableInput = (field, value) => {
+    console.log('abc', value.name);
+    console.log('values', values);
+    // const id = e.target.id.split('-');
+    // format id: categories-option-0 => get the first value
+    const name = value.name;
+    setValues({
+      ...values,
+      [name]: field,
+    });
+    // validate while changing input
+    // if (validateOnChange) validate({ [name]: vals });
+  };
+
   const resetForm = () => {
     // set the initial values and no errors
     setValues(initialFValues);
@@ -41,6 +55,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     setErrors,
     handleInputChange,
     handleAutoCompleteChange,
+    handleCreatableInput,
     resetForm,
   };
 }

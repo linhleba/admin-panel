@@ -7,14 +7,14 @@ import Control from '../controls/Controls';
 const Table = (props) => {
   /* 
     Searching in table
-    1. Check isSearch is valid or not to display div tag & function search
+    1. Check if isSearch is valid or not to display div tag & function search
     Flows in search 
-    1. On change event executed when we edit the value in input tag
+    2. On change event is executed when we edit the value in the input tag
     => Set Q as value of input
-    2. When q changes => UsedEffect based on q is executed
+    3. When q changes => UsedEffect based on q is executed
     => func searchData will check isSearch props and filter data (input: bodyData) based on q
     => Set Alldata as returning value of above func 
-    3. When Alldata changes => update sliceData props which displayed data on every page
+    4. When Alldata changes => update sliceData props which displayed data on every page
   */
 
   // Declare allData to handle and change while searching
