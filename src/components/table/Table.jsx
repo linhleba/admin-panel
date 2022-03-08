@@ -63,12 +63,6 @@ const Table = (props) => {
     if (props.isSearch) {
       const result = props.bodyData.filter((row) =>
         searchColumns.some((column) => {
-          // console.log(
-          //   'gia tri cua' +
-          //     row[column] +
-          //     'la' +
-          //     row[column].toString().toLowerCase().indexOf(q.toLowerCase()),
-          // );
           return (
             row[column].toString().toLowerCase().indexOf(q.toLowerCase()) > -1
           );
@@ -76,25 +70,18 @@ const Table = (props) => {
       );
       setAllData(result);
     }
-    // console.log('gia tri abc la', abc);
-    // console.log('gia tri', allData);
   };
   useEffect(() => {
     // console.log('chay vo nay');
     searchData();
   }, [q]);
-  // useEffect(() => {
-  //   setAllData(sortData);
-  //   // setDataShow(sliceData);
-  // }, [sortData]);
-
   return (
     <div className="table">
       {props.isSearch && (
-        <div>
+        <div className="searchTable">
           <Control.Input
             name="search"
-            label="Tìm kiếm"
+            label="Tìm kiếm nhanh"
             type="text"
             variant="standard"
             value={q}

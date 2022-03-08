@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm/useForm';
 // import * as employeeService from '../../services/employeeService';
@@ -7,11 +7,40 @@ import { Autocomplete } from '@material-ui/lab';
 import callAPI from '../../utils/apiCaller';
 import Creatable, { useCreatable } from 'react-select/creatable';
 
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    // borderBottom: '1px dotted pink',
+    // color: state.isSelected ? 'red' : 'blue',
+    // padding: 20,
+    // width: '300px',
+  }),
+  menu: (styles) => ({
+    ...styles,
+    width: '300px',
+    margin: '0px 10px',
+    zIndex: 9999,
+  }),
+  control: (styles) => ({
+    // none of react-select's styles are passed to <Control />
+    ...styles,
+    width: '300px',
+    margin: '10px 10px',
+    minHeight: '50px',
+    // width: 50,
+  }),
+  // singleValue: (provided, state) => {
+  //   // const opacity = state.isDisabled ? 0.5 : 1;
+  //   // const transition = 'opacity 300ms';
+  //   // return { ...provided, opacity, transition };
+  // },
+};
+
 const initialFValues = {
   name: '',
   categories: [],
   authors: [],
-  quantity: '',
+  quantity: '10',
   price: '',
   description: '',
 };
@@ -97,6 +126,7 @@ const BookForm = (props) => {
 
   return (
     // onsubmit
+
     <Form onSubmit={handleSubmit}>
       <Grid container>
         <Grid item xs={6}>
@@ -122,6 +152,7 @@ const BookForm = (props) => {
             value={values.categories}
             error={errors.categories}
             onChange={handleCreatableInput}
+            styles={customStyles}
           />
           <Creatable
             isMulti
@@ -138,7 +169,17 @@ const BookForm = (props) => {
             value={values.authors}
             error={errors.authors}
             onChange={handleCreatableInput}
+            styles={customStyles}
           />
+          <Controls.Input
+            name="quantity"
+            label="Số lượng"
+            value={values.quantity}
+            type="number"
+            onChange={handleInputChange}
+            error={errors.quantity}
+          />
+
           {/* <Autocomplete
             multiple
             id="categories"
@@ -176,15 +217,6 @@ const BookForm = (props) => {
               />
             )}
           /> */}
-
-          <Controls.Input
-            name="quantity"
-            label="Số lượng"
-            value={values.quantity}
-            type="number"
-            onChange={handleInputChange}
-            error={errors.quantity}
-          />
         </Grid>
         <Grid item xs={6}>
           <div>
@@ -201,7 +233,7 @@ const BookForm = (props) => {
               label="Mô tả"
               value={values.description}
               multiline
-              rows={6}
+              rows={5}
               onChange={handleInputChange}
               error={errors.description}
             />

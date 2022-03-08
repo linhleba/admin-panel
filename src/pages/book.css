@@ -1,0 +1,8 @@
+.table__button {
+  display: flex;
+}
+.table__button-add {
+  position: relative;
+  /* margin-left: auto; */
+  /* right: 0; */
+}

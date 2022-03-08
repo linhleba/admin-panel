@@ -1,8 +1,8 @@
 .table {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 .table-wrapper {
   overflow-y: auto;
@@ -81,4 +81,10 @@ tbody > tr:hover {
 .table__button-add:hover {
   background-color: var(--main-color);
   color: var(--txt-white);
+}
+.searchTable {
+  position: relative;
+  margin-left: auto;
+  right: 0;
+  margin-bottom: 20px;
 }

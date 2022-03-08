@@ -3,14 +3,10 @@ import callAPI from '../utils/apiCaller';
 export const postBookAPI = async (book) => {
   let category_ids = [];
   book.categories.map((item) => {
-    // console.log('gia tri item hien tai la', item);
-    // console.log('get lai gia tri id', item.id);
     category_ids.push(item.id);
   });
   let author_ids = [];
   book.authors.map((item) => {
-    // console.log('gia tri item tac gia hien tai la', item);
-    // console.log('get lai gia tri tac gia id', item.id);
     author_ids.push(item.id);
   });
   const payload = {
@@ -42,13 +38,6 @@ export const postCategoryAPI = async (item) => {
     responseData = response.data.data.id;
   });
   return responseData;
-
-  // console.log('hehe', responseData);
-  // return responseData;
-  // .catch((error) => {
-  //   // HANDLE ERROR
-  //   console.log('error in categories api', error);
-  // });
 };
 export const postAuthorAPI = async (item) => {
   let responseData;
