@@ -4,6 +4,9 @@ import callAPI from '../utils/apiCaller';
 import BookForm from '../components/Books/BookForm';
 import PopUp from '../components/popup/PopUp';
 import * as BookService from '../services/bookService';
+import FormatPrice from '../utils/formatPrice/formatPrice';
+import { useDispatch } from 'react-redux';
+import { setSnackbar } from '../components/redux/ducks/snackbar';
 import './book.css';
 
 const bookTableHead = [
@@ -24,17 +27,15 @@ const renderBody = (item, index) => (
     <td>{item.category.map((item) => `${item.name} `)}</td>
     <td>{item.author.map((item) => `${item.name} `)}</td>
     <td>{item.quantity}</td>
-    <td>{item.price}</td>
-    {/* <td>{item.location}</td>
-    <td>{item.location}</td> */}
+    <td>{FormatPrice(item.price)}</td>
   </tr>
 );
 
 const Book = () => {
+  const dispatch = useDispatch();
   let [books, setBooks] = useState(undefined);
   const [openPopup, setOpenPopup] = useState(false);
   const openInPopup = (item) => {
-    // setRecordForEdit(item);
     setOpenPopup(true);
   };
   // Use useEffect to set it for displaying on the table
@@ -45,7 +46,7 @@ const Book = () => {
       setBooks(response.data);
     });
     // return () => (mounted = false);
-  }, []);
+  }, [books]);
 
   const handleInfo = async (dataBooks, resetForm) => {
     // if (books.id == 0) employeeService.insertEmployee(employee);
@@ -60,22 +61,30 @@ const Book = () => {
       }),
     );
 
-    console.log('data book author', dataBooks);
     await Promise.all(
       dataBooks.authors.map(async (item) => {
         if (item.id === undefined) {
-          // console.log(BookService.postCategoryAPI(item));'
           item.id = await BookService.postAuthorAPI(item);
         }
       }),
     );
 
-    await BookService.postBookAPI(dataBooks);
+    const result = await BookService.postBookAPI(dataBooks);
+    console.log('ket qua tra ve', result);
+    if (result == 200) {
+      // const dispatch = useDispatch();
+      // handle to display snackbar
+      // console.log('ket qua tra ve ben trong', result);
+      dispatch(setSnackbar(true, 'success', 'Cập nhật sách thành công!'));
+    } else {
+      dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
+    }
     // reset form after update books into data
     resetForm();
     await callAPI('api/book', 'GET', null).then((response) => {
       // get data from call api
-      setBooks(response.data);
+      console.log('response la', response);
+      setBooks(response.data.data);
     });
   };
   return (

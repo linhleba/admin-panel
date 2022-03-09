@@ -1,6 +1,7 @@
 import callAPI from '../utils/apiCaller';
 
 export const postBookAPI = async (book) => {
+  let responseStatus;
   let category_ids = [];
   book.categories.map((item) => {
     category_ids.push(item.id);
@@ -17,12 +18,14 @@ export const postBookAPI = async (book) => {
     category_id: category_ids,
     author_id: author_ids,
   };
-  console.log(payload);
   await callAPI('api/book', 'POST', payload).then((response) => {
-    console.log(response);
+    responseStatus = response.status;
+    // return response;
     // get data from call api
     // setBooks(response.data);
   });
+  // console.log('responseStatus', responseStatus);
+  return responseStatus;
 };
 
 export const postCategoryAPI = async (item) => {
@@ -30,10 +33,7 @@ export const postCategoryAPI = async (item) => {
   const payload = {
     name: item.name,
   };
-  console.log(payload);
   await callAPI('api/category', 'POST', payload).then((response) => {
-    // console.log(response);
-    console.log('response', response.data.data.id);
     // item.id = response.data.data.id;
     responseData = response.data.data.id;
   });
@@ -45,7 +45,6 @@ export const postAuthorAPI = async (item) => {
     name: item.name,
     telephone: '',
   };
-  console.log(payload);
   await callAPI('api/author', 'POST', payload).then((response) => {
     responseData = response.data.data.id;
   });

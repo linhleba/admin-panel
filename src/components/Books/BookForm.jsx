@@ -6,6 +6,8 @@ import { useForm, Form } from '../../components/useForm/useForm';
 import { Autocomplete } from '@material-ui/lab';
 import callAPI from '../../utils/apiCaller';
 import Creatable, { useCreatable } from 'react-select/creatable';
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
 
 const customStyles = {
   option: (provided, state) => ({
@@ -113,16 +115,43 @@ const BookForm = (props) => {
   let [authorsItems, setAuthorsItems] = useState([]);
   useEffect(() => {
     callAPI('api/category', 'GET', null).then((response) => {
-      console.log(response.data);
       setCategoriesItems(response.data);
     });
   }, []);
   useEffect(() => {
     callAPI('api/author', 'GET', null).then((response) => {
-      console.log(response.data);
       setAuthorsItems(response.data);
     });
   }, []);
+  const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
+    props,
+    ref,
+  ) {
+    const { onChange, ...other } = props;
+
+    return (
+      <NumberFormat
+        {...other}
+        getInputRef={ref}
+        onValueChange={(values) => {
+          onChange({
+            target: {
+              name: props.name,
+              value: values.value,
+            },
+          });
+        }}
+        thousandSeparator
+        isNumericString
+        prefix="$"
+      />
+    );
+  });
+
+  NumberFormatCustom.propTypes = {
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
 
   return (
     // onsubmit
@@ -179,44 +208,6 @@ const BookForm = (props) => {
             onChange={handleInputChange}
             error={errors.quantity}
           />
-
-          {/* <Autocomplete
-            multiple
-            id="categories"
-            name="categories"
-            value={values.categories}
-            onChange={handleAutoCompleteChange}
-            error={errors.categories}
-            options={categoriesItems}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <Controls.Input
-                {...params}
-                label="Thể loại"
-                fullWidth
-                margin="normal"
-              />
-            )}
-          />
-
-          <Autocomplete
-            multiple
-            id="authors"
-            name="authors"
-            value={values.authors}
-            onChange={handleAutoCompleteChange}
-            error={errors.authors}
-            options={authorsItems}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <Controls.Input
-                {...params}
-                label="Tác giả"
-                fullWidth
-                margin="normal"
-              />
-            )}
-          /> */}
         </Grid>
         <Grid item xs={6}>
           <div>
@@ -224,7 +215,9 @@ const BookForm = (props) => {
               name="price"
               label="Giá"
               value={values.price}
-              type="number"
+              // InputProps={{
+              //   inputComponent: NumberFormatCustom,
+              // }}
               onChange={handleInputChange}
               error={errors.price}
             />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core';
+import FormatPrice from '../../utils/formatPrice/formatPrice';
 
 export function useForm(initialFValues, validateOnChange = false, validate) {
   const [values, setValues] = useState(initialFValues);
@@ -29,8 +30,6 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
   };
 
   const handleCreatableInput = (field, value) => {
-    console.log('abc', value.name);
-    console.log('values', values);
     // const id = e.target.id.split('-');
     // format id: categories-option-0 => get the first value
     const name = value.name;

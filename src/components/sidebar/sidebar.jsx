@@ -7,7 +7,6 @@ import sidebar_items from '../../assets/JsonData/sidebar_routes.json';
 const logo = '';
 const SidebarItem = (props) => {
   const active = props.active ? 'active' : '';
-  // console.log('active is', active);
   return (
     <div className="sidebar__item">
       <div className={`sidebar__item-inner ${active}`}>
@@ -19,7 +18,6 @@ const SidebarItem = (props) => {
 };
 
 const sidebar = (props) => {
-  console.log('props', props);
   const activeItem = sidebar_items.findIndex(
     (item) => item.route === props.location.pathname,
   );
@@ -30,7 +28,6 @@ const sidebar = (props) => {
       </div>
       {sidebar_items.map((obj, key) => (
         <Link to={obj.route} key={key}>
-          {/* {console.log('obj index', obj.index)} */}
           <SidebarItem
             title={obj.display_name}
             icon={obj.icon}

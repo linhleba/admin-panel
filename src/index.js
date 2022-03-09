@@ -6,11 +6,17 @@ import './assets/boxicons-2.0.7/css/boxicons.min.css';
 import './assets/css/grid.css';
 import './assets/css/index.css';
 import './assets/css/theme.css';
+import { Provider } from 'react-redux';
+import store from './components/redux/configureStore';
+import SnackBar from './components/snackbar/SnackBar';
 
 document.title = 'Report';
 ReactDOM.render(
   <React.StrictMode>
-    <Layout />
+    <Provider store={store}>
+      {/* <SnackBar /> */}
+      <Layout />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

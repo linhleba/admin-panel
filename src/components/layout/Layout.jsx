@@ -4,10 +4,12 @@ import Sidebar from '../sidebar/sidebar';
 import Routes from '../Routes';
 import TopNav from '../topnav/TopNav';
 import { BrowserRouter, Route } from 'react-router-dom';
+import SnackBar from '../../components/snackbar/SnackBar';
 
 const Layout = () => {
   return (
     <BrowserRouter>
+      <SnackBar />
       <Route
         render={(props) => (
           <div className="layout">
