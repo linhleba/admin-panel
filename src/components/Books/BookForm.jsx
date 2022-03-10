@@ -8,6 +8,7 @@ import callAPI from '../../utils/apiCaller';
 import Creatable, { useCreatable } from 'react-select/creatable';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
+import FormatPrice from '../../utils/formatPrice/formatPrice';
 
 const customStyles = {
   option: (provided, state) => ({
@@ -103,6 +104,9 @@ const BookForm = (props) => {
       handleInfo(values, resetForm);
     }
   };
+  useEffect(() => {
+    values.price = FormatPrice(values.price);
+  }, [values.price]);
 
   //   useEffect(() => {
   //     if (recordForEdit != null)
