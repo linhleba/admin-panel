@@ -1,8 +1,7 @@
 version: '3'
 services:
   frontend:
-    build:
-      image: linhleba/admin-panel
+    image: linhleba/admin-panel
     container_name: frontend
     ports:
       - '3000:3000'
