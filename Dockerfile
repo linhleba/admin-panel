@@ -5,17 +5,13 @@ FROM node:alpine as builder
 WORKDIR /frontend
 
 # copy the json file first
-COPY ./package.json /frontend
+COPY ./package*.json /frontend 
 
 # install npm dependencies
 RUN npm install
 
 # copy other project files
 COPY . .
-
-# build the folder
-RUN npm run build
-
 
 # Stat npm 
 CMD ["npm", "start"]
