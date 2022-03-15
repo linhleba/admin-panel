@@ -73,6 +73,7 @@ const Table = (props) => {
   useEffect(() => {
     searchData();
   }, [q]);
+
   return (
     <div className="table">
       {props.isSearch && (
