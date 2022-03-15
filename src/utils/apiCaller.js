@@ -7,9 +7,11 @@ const apiCaller = (endpoint, method = 'GET', payload) => {
     method: method,
     url: `${Config.API_URL}/${endpoint}`,
     data: payload,
+    headers: { 'Content-Type': 'application/json' },
+    // credentials: 'include',
     // headers: {
     //   Cookie:
-    //     'refresh_jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImlhdCI6MTY0Njg5OTU4MSwiZXhwIjoxNjc4NDU3MTgxfQ.mM8kO3y2n-Icyy6N6uFBrkg0nphIEIOWu-xnD3PFNkE; cookie2=value; cookie3=value;',
+    //     'access_jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidHlwZSI6MSwiaWF0IjoxNjQ3MjY2MjI4LCJleHAiOjE2NDcyNjk4Mjh9.Vl4m7InvL3sjJA99StiTIlxP509jeQ9KUn7r4F742dI; cookie2=value; cookie3=value;',
     // },
     withCredentials: true,
   }).catch(function (error) {

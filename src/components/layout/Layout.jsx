@@ -1,12 +1,13 @@
 import './layout.css';
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../sidebar/sidebar';
-import Routes from '../Routes';
+import HomeRoutes from '../Routes';
 import TopNav from '../topnav/TopNav';
 import { BrowserRouter, Route } from 'react-router-dom';
 import SnackBar from '../../components/snackbar/SnackBar';
 import Login from '../../components/login/Login';
 import Cookie from 'universal-cookie';
+import { AuthProvider } from '../../context/AuthProvider';
 
 const cookie = new Cookie();
 const setToken = () => {};
@@ -22,20 +23,22 @@ const Layout = () => {
   }
   return (
     <BrowserRouter>
-      <SnackBar />
-      <Route
-        render={(props) => (
-          <div className="layout">
-            <Sidebar {...props} />
-            <div className="layout__content">
-              <TopNav />
-              <div className="layout_content-main">
-                <Routes />
+      <AuthProvider>
+        <SnackBar />
+        <Route
+          render={(props) => (
+            <div className="layout">
+              <Sidebar {...props} />
+              <div className="layout__content">
+                <TopNav />
+                <div className="layout_content-main">
+                  <HomeRoutes />
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      />
+          )}
+        />
+      </AuthProvider>
     </BrowserRouter>
   );
 };
