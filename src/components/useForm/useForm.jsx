@@ -14,7 +14,22 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
       [name]: value,
     });
     // validate while changing input
-    if (validateOnChange) validate({ [name]: value });
+    if (validateOnChange) {
+      validate({ [name]: value });
+    }
+  };
+  const handleInputPrice = (e) => {
+    const { name, value } = e.target;
+
+    console.log('value price', value);
+    setValues({
+      ...values,
+      [name]: FormatPrice(value),
+      // validate while changing input
+      if(validateOnChange) {
+        validate({ [name]: value });
+      },
+    });
   };
 
   const handleAutoCompleteChange = (e, vals) => {
@@ -56,6 +71,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     handleAutoCompleteChange,
     handleCreatableInput,
     resetForm,
+    handleInputPrice,
   };
 }
 

@@ -20,6 +20,10 @@ const Table = (props) => {
   // Declare allData to handle and change while searching
   let [allData, setAllData] = useState(props.bodyData);
 
+  useEffect(() => {
+    setAllData(props.bodyData);
+  }, [props.bodyData]);
+
   const [sliceData, setSliceData] = useState(
     props.limit && allData ? allData.slice(0, props.limit) : allData,
   );
@@ -73,6 +77,7 @@ const Table = (props) => {
   useEffect(() => {
     searchData();
   }, [q]);
+
   return (
     <div className="table">
       {props.isSearch && (

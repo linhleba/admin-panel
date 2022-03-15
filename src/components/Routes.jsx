@@ -1,15 +1,19 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Customer from '../pages/Customer';
+import User from '../pages/User';
 import Dashboard from '../pages/Dashboard';
 import Book from '../pages/Book';
+import Profile from '../pages/Profile';
+import Password from '../pages/Password';
 
 const Routes = () => {
   return (
     <Switch>
-      <Route path="/customers" component={Customer} />
+      <Route path="/users" component={User} />
       <Route path="/" exact component={Dashboard} />
       <Route exact path="/books" component={Book} />
+      <Route exact path="/profile" component={Profile} />
+      <Route exact path="/password" component={Password} />
     </Switch>
   );
 };

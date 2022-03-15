@@ -116,7 +116,7 @@ const Book = () => {
               </PopUp>
               {books && (
                 <Table
-                  limit="5"
+                  limit="10"
                   headData={bookTableHead}
                   renderHead={(item, index) => renderHead(item, index)}
                   bodyData={books}

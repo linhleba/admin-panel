@@ -1,12 +1,12 @@
 [
   {
-    "display_name": "Dashboard",
+    "display_name": "Trang chủ",
     "route": "/",
     "icon": "bx bx-category-alt"
   },
   {
-    "display_name": "Customers",
-    "route": "/customers",
+    "display_name": "Người dùng",
+    "route": "/users",
     "icon": "bx bx-user-pin"
   },
   {

@@ -14,7 +14,7 @@ const displayNotificationData = (object, index) => (
 );
 
 const displayUserData = (object, index) => (
-  <Link key={index} to="/">
+  <Link key={index} to={object.url}>
     <div className="notification-item">
       <i className={object.icon}></i>
       <div>{object.content}</div>
