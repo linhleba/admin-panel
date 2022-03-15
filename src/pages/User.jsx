@@ -5,13 +5,14 @@ import Table from '../components/table/Table';
 import Controls from '../components/controls/Controls';
 import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../components/redux/ducks/snackbar';
+import './user.css';
 
 const customerTableHead = [
   'Người dùng',
   'Ảnh đại diện',
   'Tên',
   'Email',
-  'Loại thành viên',
+  'Vai trò',
   'Hành động',
 ];
 
@@ -90,7 +91,17 @@ const User = () => {
       <td>
         {index === editingRow ? handleUserName(item.username) : item.username}
       </td>
-      <td>{}</td>
+      <td>
+        {item.photo ? (
+          <img src={item.photo} alt="Album Art" className="userImage" />
+        ) : (
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            alt="Album Art"
+            className="userImage"
+          />
+        )}
+      </td>
       <td>{item.name}</td>
       <td>{item.email}</td>
       <td>

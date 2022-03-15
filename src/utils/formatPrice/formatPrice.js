@@ -1,5 +1,9 @@
 const handlePrice = (price) => {
   if (price !== undefined) {
+    // replace , in price
+    // const str = "23,000";
+    // const flattenPrice = Number(price.toString().replace(',', ''));
+    // console.log('flatten', flattenPrice);s
     var priceFormat = '';
     while (price > 1000) {
       if (price % 1000 !== 0) {

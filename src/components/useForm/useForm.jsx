@@ -18,6 +18,19 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
       validate({ [name]: value });
     }
   };
+  const handleInputPrice = (e) => {
+    const { name, value } = e.target;
+
+    console.log('value price', value);
+    setValues({
+      ...values,
+      [name]: FormatPrice(value),
+      // validate while changing input
+      if(validateOnChange) {
+        validate({ [name]: value });
+      },
+    });
+  };
 
   const handleAutoCompleteChange = (e, vals) => {
     const id = e.target.id.split('-');
@@ -58,6 +71,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     handleAutoCompleteChange,
     handleCreatableInput,
     resetForm,
+    handleInputPrice,
   };
 }
 

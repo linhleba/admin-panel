@@ -93,6 +93,7 @@ const BookForm = (props) => {
     handleInputChange,
     handleAutoCompleteChange,
     handleCreatableInput,
+    handleInputPrice,
     resetForm,
   } = useForm(initialFValues, true, validate);
 
@@ -222,7 +223,7 @@ const BookForm = (props) => {
               // InputProps={{
               //   inputComponent: NumberFormatCustom,
               // }}
-              onChange={handleInputChange}
+              onChange={handleInputPrice}
               error={errors.price}
             />
             <Controls.Input
