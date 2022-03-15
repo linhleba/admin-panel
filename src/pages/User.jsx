@@ -68,13 +68,12 @@ const User = () => {
         }
       });
       // call again api to update data
-      // await callAPI('api/account/getall', 'GET').then((response) => {
-      //   // get data from call api
-      //   console.log(response);
-      //   // setUsers('haha');
+      await callAPI('api/account/getall', 'GET').then((response) => {
+        // get data from call api
+        setUsers(response.data);
 
-      //   // console.log('hehe', response);
-      // });
+        // console.log('hehe', response);
+      });
       // console.log(users);
       setEditingRow(null);
     } else {
