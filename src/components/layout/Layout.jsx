@@ -7,17 +7,13 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import SnackBar from '../../components/snackbar/SnackBar';
 import Login from '../../components/login/Login';
 import Cookie from 'universal-cookie';
-
-const cookie = new Cookie();
-const setToken = () => {};
-const getToken = () => {
-  return cookie.get('access_jwt_token');
-};
+import useToken from '../../components/hooks/useToken';
 const Layout = () => {
-  // const token = getToken();
-  // console.log('token', token);
-  const [token, setToken] = useState();
+  // const {token, setToken } = useState(null);
+  const { token, setToken } = useToken();
+
   if (!token) {
+    console.log('vao lai nay');
     return <Login setToken={setToken} />;
   }
   return (
