@@ -6,7 +6,13 @@ import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../components/redux/ducks/snackbar';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import callAPI from '../utils/apiCaller';
+import Axios from 'axios';
+import './profile.css';
 
+const URL_UPLOAD_IMAGE =
+  'http://api.cloudinary.com/v1_1/dr6oretlc/image/upload';
+
+const NAME_UPLOAD_PRESET = 'avatarprofile';
 const Profile = () => {
   const dispatch = useDispatch();
   const [initialFValues, setInitialFValues] = useState({
@@ -15,6 +21,7 @@ const Profile = () => {
     email: '',
     phone: '',
     address: '',
+    photo: null,
   });
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -24,9 +31,14 @@ const Profile = () => {
         ? ''
         : 'Định dạng email không hợp lệ.';
     }
-    if ('phone' in fieldValues)
-      temp.phone =
-        fieldValues.phone.length > 9 ? '' : 'Số điện thoại không hợp lệ.';
+    if ('phone' in fieldValues) {
+      if (!fieldValues.phone) {
+        temp.phone = '';
+      } else {
+        temp.phone =
+          fieldValues.phone.length > 9 ? '' : 'Số điện thoại không hợp lệ.';
+      }
+    }
 
     setErrors({
       ...temp,
@@ -46,6 +58,7 @@ const Profile = () => {
         email: values.email,
         telephone: values.phone,
         address: values.address,
+        photo: values.photo,
       };
       await callAPI('api/account/update', 'put', payload).then((res) => {
         console.log(res);
@@ -62,16 +75,30 @@ const Profile = () => {
 
   useEffect(async () => {
     await callAPI('api/account/info', 'get', null).then((res) => {
-      console.log(res.data.name);
       setValues({
         username: res.data.username,
         name: res.data.name ? res.data.name : '',
         email: res.data.email ? res.data.email : '',
         phone: res.data.telephone ? res.data.telephone : '',
         address: res.data.address ? res.data.address : '',
+        photo: res.data.photo ? res.data.photo : null,
       });
     });
   }, []);
+
+  const uploadImage = (file) => {
+    const formData = new FormData();
+    formData.append('file', file[0]);
+    console.log(file);
+    formData.append('upload_preset', NAME_UPLOAD_PRESET);
+
+    Axios.post(URL_UPLOAD_IMAGE, formData).then((res) => {
+      setValues({
+        ...values,
+        ['photo']: res.data.url,
+      });
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -120,8 +147,30 @@ const Profile = () => {
             error={errors.address}
           />
         </Grid>
-        <Grid item xs={6}>
-          Ảnh đại diện
+        <Grid container item xs={6} className="gridContainer">
+          <div className="photo-info">
+            {values.photo ? (
+              <img
+                src={values.photo}
+                alt="Album Art"
+                className="userImageInfo"
+              />
+            ) : (
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                alt="Album Art"
+                className="userImageInfo"
+              />
+            )}
+            <input
+              name="photo"
+              type="file"
+              label="Ảnh đại diện"
+              // value={values.photo}
+              onChange={(e) => uploadImage(e.target.files)}
+              // error={errors.address}
+            />
+          </div>
         </Grid>
       </Grid>
       <Controls.Button type="submit" text="Lưu thay đổi" />

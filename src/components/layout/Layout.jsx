@@ -17,9 +17,9 @@ const Layout = () => {
   // const token = getToken();
   // console.log('token', token);
   const [token, setToken] = useState();
-  // if (!token) {
-  //   return <Login setToken={setToken} />;
-  // }
+  if (!token) {
+    return <Login setToken={setToken} />;
+  }
   return (
     <BrowserRouter>
       <SnackBar />
