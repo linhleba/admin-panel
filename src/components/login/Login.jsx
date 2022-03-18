@@ -17,6 +17,12 @@ import Controls from '../../components/controls/Controls';
 import Input from './Input';
 import { GoogleLogin } from 'react-google-login';
 import Icon from './icon';
+import { useDispatch } from 'react-redux';
+// import { AUTH } from '../../constants/actionTypes';
+import { authenticate } from '../../components/redux/ducks/auth';
+import { signIn, signUp } from '../../components/redux/actions/auth';
+import { useHistory } from 'react-router-dom';
+import * as api from '../../api/index';
 
 const loginUser = async (credentials) => {
   let res;
@@ -39,13 +45,15 @@ const initialState = {
 };
 
 const Login = ({ setToken }) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
   const [form, setForm] = useState(initialState);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+  // const [username, setUserName] = useState();
+  // const [password, setPassword] = useState();
 
   const switchMode = () => {
     setForm(initialState);
@@ -55,18 +63,33 @@ const Login = ({ setToken }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = await loginUser({
-      username,
-      password,
-    });
-    setToken(token);
+    // const token = await loginUser({
+    //   username,
+    //   password,
+    // });
+    // setToken(token);
+    if (isSignedUp) {
+      // dispatch(signUp(form, history));
+    } else {
+      console.log(form);
+      const { data } = await api.signIn(form);
+      setToken(data.access_jwt_token);
+      dispatch(authenticate(data));
+      history.push('/');
+      // dispatch(signIn(form, history));
+    }
   };
   const googleSuccess = async (res) => {
+    console.log(res);
     const result = res?.profileObj;
     const token = res?.tokenId;
+    const data = {
+      result,
+      token,
+    };
 
     try {
-      // dispatch({ type: AUTH, data: { result, token } });
+      dispatch(authenticate(data));
       // history.push('/');
     } catch (error) {
       console.log(error);
