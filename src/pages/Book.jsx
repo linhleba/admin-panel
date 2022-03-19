@@ -70,7 +70,6 @@ const Book = () => {
     );
 
     const result = await BookService.postBookAPI(dataBooks);
-    console.log('ket qua tra ve', result);
     if (result == 200) {
       // const dispatch = useDispatch();
       // handle to display snackbar

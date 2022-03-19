@@ -33,7 +33,8 @@ const Layout = () => {
     dispatch(logout());
     history.push('/');
     setUser(null);
-    return <Login />;
+    setToken(null);
+    return <Login setToken={setToken} />;
   };
 
   useEffect(() => {
@@ -41,13 +42,23 @@ const Layout = () => {
     // const token = user?.access_jwt_token;
 
     if (token) {
-      const decodedToken = decode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) LogOut();
-    }
+      try {
+        const decodedToken = decode(token);
 
+        if (decodedToken.exp * 1000 < new Date().getTime()) LogOut();
+
+        // HANDLE EXPIRATION BY REFRESHING IN HERE
+        // NOT DONE
+      } catch (err) {
+        // handle when localStorage has invalid token
+
+        LogOut();
+      }
+    }
     setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location.pathname]);
 
+  // handle if token is not existed (localStorage doesn't have key "profile")
   if (!token) {
     // console.log('vao lai nay');
     return <Login setToken={setToken} />;
@@ -58,7 +69,7 @@ const Layout = () => {
         <div className="layout">
           <Sidebar {...props} />
           <div className="layout__content">
-            <TopNav />
+            <TopNav setToken={setToken} />
             <div className="layout_content-main">
               <Routes />
             </div>

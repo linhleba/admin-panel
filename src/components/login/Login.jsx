@@ -23,6 +23,7 @@ import { authenticate } from '../../components/redux/ducks/auth';
 import { signIn, signUp } from '../../components/redux/actions/auth';
 import { useHistory } from 'react-router-dom';
 import * as api from '../../api/index';
+import { setSnackbar } from '../redux/ducks/snackbar';
 
 const loginUser = async (credentials) => {
   let res;
@@ -70,17 +71,45 @@ const Login = ({ setToken }) => {
     // setToken(token);
     if (isSignedUp) {
       // dispatch(signUp(form, history));
+      if (form.password === form.confirmPassword) {
+        const { data } = await api.signUp(form);
+        console.log(data);
+        if (!data) {
+          dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra'));
+        } else {
+          // account is exsited
+          if (data.message != 'successfully created') {
+            dispatch(setSnackbar(true, 'error', 'Tên đăng nhập đã tồn tại!'));
+          } else {
+            const { data } = await api.signIn(form);
+            setToken(data.access_jwt_token);
+            dispatch(authenticate({ access_jwt_token: data.access_jwt_token }));
+          }
+        }
+      } else {
+        dispatch(setSnackbar(true, 'error', 'Mật khẩu không khớp'));
+      }
     } else {
-      console.log(form);
+      // console.log(form);
       const { data } = await api.signIn(form);
-      setToken(data.access_jwt_token);
-      dispatch(authenticate(data));
-      history.push('/');
+
+      if (!data) {
+        dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra'));
+      } else {
+        if (!data.access_jwt_token) {
+          dispatch(
+            setSnackbar(true, 'error', 'Thông tin đăng nhập không chính xác!'),
+          );
+        } else {
+          setToken(data.access_jwt_token);
+          dispatch(authenticate({ access_jwt_token: data.access_jwt_token }));
+          // history.push('/');
+        }
+      }
       // dispatch(signIn(form, history));
     }
   };
   const googleSuccess = async (res) => {
-    console.log(res);
     const result = res?.profileObj;
     const token = res?.tokenId;
     const data = {

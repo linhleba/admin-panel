@@ -61,7 +61,6 @@ const Profile = () => {
         photo: values.photo,
       };
       await callAPI('api/account/update', 'put', payload).then((res) => {
-        console.log(res);
         if (res.status == 200) {
           dispatch(
             setSnackbar(true, 'success', 'Cập nhật thông tin thành công!'),
@@ -89,7 +88,7 @@ const Profile = () => {
   const uploadImage = (file) => {
     const formData = new FormData();
     formData.append('file', file[0]);
-    console.log(file);
+
     formData.append('upload_preset', NAME_UPLOAD_PRESET);
 
     Axios.post(URL_UPLOAD_IMAGE, formData).then((res) => {

@@ -8,7 +8,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATION:
-      console.log(action);
+      console.log(action?.data);
       localStorage.setItem('profile', JSON.stringify({ ...action?.data }));
 
       return { ...state, authData: action.data, loading: false, errors: null };

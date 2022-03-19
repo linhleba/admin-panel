@@ -5,6 +5,7 @@ import Dashboard from '../pages/Dashboard';
 import Book from '../pages/Book';
 import Profile from '../pages/Profile';
 import Password from '../pages/Password';
+import Login from '../components/login/Login';
 
 const Routes = () => {
   return (
