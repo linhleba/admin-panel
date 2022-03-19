@@ -63,7 +63,7 @@ const User = () => {
           // const dispatch = useDispatch();
           // handle to display snackbar
           // console.log('ket qua tra ve ben trong', result);
-          dispatch(setSnackbar(true, 'success', 'Cập nhật sách thành công!'));
+          dispatch(setSnackbar(true, 'success', 'Cập nhật thành công!'));
         } else {
           dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
         }

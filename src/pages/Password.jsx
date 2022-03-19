@@ -104,7 +104,7 @@ const Password = () => {
       <Controls.Button
         text="Đặt lại"
         color="default"
-        onClick={() => console.log('click')}
+        onClick={() => resetForm()}
       />
     </Form>
   );

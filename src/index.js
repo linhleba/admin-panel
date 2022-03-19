@@ -9,13 +9,14 @@ import './assets/css/theme.css';
 import { Provider } from 'react-redux';
 import store from './components/redux/configureStore';
 import SnackBar from './components/snackbar/SnackBar';
+import App from './components/App';
 
 document.title = 'Report';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       {/* <SnackBar /> */}
-      <Layout />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

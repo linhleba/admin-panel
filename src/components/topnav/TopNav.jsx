@@ -5,21 +5,14 @@ import notifications from '../../assets/JsonData/notification.json';
 import user_menus from '../../assets/JsonData/user_menus.json';
 import { Link } from 'react-router-dom';
 import ThemeMenu from '../thememenu/ThemeMenu';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../components/redux/ducks/auth';
 
 const displayNotificationData = (object, index) => (
   <div key={index} className="notification-item">
     <i className={object.icon}></i>
     <div>{object.content}</div>
   </div>
-);
-
-const displayUserData = (object, index) => (
-  <Link key={index} to={object.url}>
-    <div className="notification-item">
-      <i className={object.icon}></i>
-      <div>{object.content}</div>
-    </div>
-  </Link>
 );
 
 const current_user = {
@@ -36,7 +29,32 @@ const renderUserToggle = (user) => (
   </div>
 );
 
-const TopNav = () => {
+const TopNav = (props) => {
+  const dispatch = useDispatch();
+
+  const handleLogOut = () => {
+    dispatch(logout());
+    props.setToken(null);
+    // history.push('/');
+  };
+  const displayUserData = (object, index) => {
+    return (
+      <Link
+        key={index}
+        to={object.url}
+        onClick={() => {
+          if (index === 3) {
+            handleLogOut();
+          }
+        }}
+      >
+        <div className="notification-item">
+          <i className={object.icon}></i>
+          <div>{object.content}</div>
+        </div>
+      </Link>
+    );
+  };
   return (
     <div className="top-nav">
       <div className="top-nav__search">

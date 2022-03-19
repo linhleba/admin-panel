@@ -1,10 +1,11 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import User from '../pages/User';
 import Dashboard from '../pages/Dashboard';
 import Book from '../pages/Book';
 import Profile from '../pages/Profile';
 import Password from '../pages/Password';
+import Login from '../components/login/Login';
 
 const Routes = () => {
   return (

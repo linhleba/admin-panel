@@ -41,6 +41,7 @@ export default function Input(props) {
     onChange,
     variant = 'outlined',
     InputProps,
+    type,
     ...other
   } = props;
   return (
@@ -51,6 +52,7 @@ export default function Input(props) {
       value={value}
       onChange={onChange}
       InputProps={InputProps}
+      type={type}
       {...other}
       {...(error && { error: true, helperText: error })}
     />
