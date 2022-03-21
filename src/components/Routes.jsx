@@ -6,6 +6,7 @@ import Book from '../pages/Book';
 import Profile from '../pages/Profile';
 import Password from '../pages/Password';
 import Login from '../components/login/Login';
+import Order from '../pages/order/Order';
 
 const Routes = () => {
   return (
@@ -15,7 +16,7 @@ const Routes = () => {
       <Route exact path="/books" component={Book} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/password" component={Password} />
-      <Route exact path="/orders" component={Book}/>
+      <Route exact path="/orders" component={Order}/>
     </Switch>
   );
 };
