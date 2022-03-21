@@ -17,12 +17,14 @@ const Table = (props) => {
     4. When Alldata changes => update sliceData props which displayed data on every page
   */
 
+  const { headData, bodyData, renderBody, renderHead, isSearch } = props;
+
   // Declare allData to handle and change while searching
-  let [allData, setAllData] = useState(props.bodyData);
+  let [allData, setAllData] = useState(bodyData);
 
   useEffect(() => {
-    setAllData(props.bodyData);
-  }, [props.bodyData]);
+    setAllData(bodyData);
+  }, [bodyData]);
 
   const [sliceData, setSliceData] = useState(
     props.limit && allData ? allData.slice(0, props.limit) : allData,
@@ -63,8 +65,8 @@ const Table = (props) => {
   const searchData = () => {
     // Stop using func if isSearch is not declared
     // prevent for missing 'name' which declared by searchColumns prop above
-    if (props.isSearch) {
-      const result = props.bodyData.filter((row) =>
+    if (isSearch) {
+      const result = bodyData.filter((row) =>
         searchColumns.some((column) => {
           return (
             row[column].toString().toLowerCase().indexOf(q.toLowerCase()) > -1
@@ -80,7 +82,7 @@ const Table = (props) => {
 
   return (
     <div className="table">
-      {props.isSearch && (
+      {isSearch && (
         <div className="searchTable">
           <Control.Input
             name="search"
@@ -96,18 +98,18 @@ const Table = (props) => {
       )}
       <div className="table-wrapper">
         <table>
-          {props.headData && props.renderHead ? (
+          {headData && renderHead ? (
             <thead>
               <tr>
-                {props.headData.map((item, index) =>
-                  props.renderHead(item, index),
+                {headData.map((item, index) =>
+                  renderHead(item, index),
                 )}
               </tr>
             </thead>
           ) : null}
-          {allData && props.renderBody ? (
+          {allData && renderBody ? (
             <tbody>
-              {dataShow.map((item, index) => props.renderBody(item, index))}
+              {dataShow.map((item, index) => renderBody(item, index))}
             </tbody>
           ) : null}
         </table>
