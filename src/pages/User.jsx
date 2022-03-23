@@ -146,7 +146,11 @@ const User = () => {
 
   // Use useEffect to set it for displaying on the table
   useEffect(() => {
-    callAPI('api/account/getall', 'GET').then((response) => {
+    let profile = localStorage.getItem('profile');
+    let access_jwt_token = JSON.parse(profile).access_jwt_token;
+    callAPI('api/account/getall', 'GET', null, {
+      authorization: access_jwt_token,
+    }).then((response) => {
       // get data from call api
       setUsers(response.data);
       // console.log('hehe', response);
