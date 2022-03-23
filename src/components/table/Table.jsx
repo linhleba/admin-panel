@@ -3,6 +3,7 @@ import './table.css';
 import AdditionArea from '../additionarea/AdditionArea';
 import PopUp from '../popup/PopUp';
 import Control from '../controls/Controls';
+import Pagination from '@mui/material/Pagination';
 
 const Table = (props) => {
   /* 
@@ -53,7 +54,7 @@ const Table = (props) => {
     const end = start + Number(props.limit);
     // set data is between start and end in each page
     setDataShow(allData.slice(start, end));
-    setCurrentPage(page + 1);
+    setCurrentPage(page);
   };
   // set State search in table
   let [q, setQ] = useState('');
@@ -76,6 +77,7 @@ const Table = (props) => {
   };
   useEffect(() => {
     searchData();
+    console.log('daata search', q);
   }, [q]);
 
   return (
@@ -113,19 +115,11 @@ const Table = (props) => {
         </table>
       </div>
       {maxPage > 1 ? (
-        <div className="table__pagination">
-          {range.map((item, index) => (
-            <div
-              key={index}
-              className={`table__pagination-item ${
-                currentPage === index + 1 ? 'active' : ''
-              }`}
-              onClick={() => selectPage(index)}
-            >
-              {item + 1}
-            </div>
-          ))}
-        </div>
+        <Pagination
+          color="primary"
+          count={range.length}
+          onChange={(event, page) => selectPage(page)}
+        />
       ) : null}
     </div>
   );

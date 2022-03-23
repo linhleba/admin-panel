@@ -20,14 +20,15 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
   };
   const handleInputPrice = (e) => {
     const { name, value } = e.target;
-
-    console.log('value price', value);
+    // console.log('value price', value);
+    const n = parseInt(value.replace(/\D/g, ''), 10);
+    const formatValue = !n ? 0 : n.toLocaleString();
     setValues({
       ...values,
-      [name]: FormatPrice(value),
+      [name]: formatValue,
       // validate while changing input
       if(validateOnChange) {
-        validate({ [name]: value });
+        validate({ [name]: formatValue });
       },
     });
   };
