@@ -46,7 +46,7 @@ const Book = () => {
       setBooks(response.data);
     });
     // return () => (mounted = false);
-  }, [books]);
+  }, []);
 
   const handleInfo = async (dataBooks, resetForm) => {
     // if (books.id == 0) employeeService.insertEmployee(employee);
