@@ -20,12 +20,27 @@ const bookTableHead = [
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
 
+const handleSplitDisplaying = (item, index, arr) => {
+  if (arr.length - 1 === index) {
+    return item.name;
+  }
+  return `${item.name}, `;
+};
+
 const renderBody = (item, index) => (
   <tr key={index}>
     <td>{item.id}</td>
     <td>{item.name}</td>
-    <td>{item.category.map((item) => `${item.name} `)}</td>
-    <td>{item.author.map((item) => `${item.name} `)}</td>
+    <td>
+      {item.category.map((item, index, arr) =>
+        handleSplitDisplaying(item, index, arr),
+      )}
+    </td>
+    <td>
+      {item.author.map((item, index, arr) =>
+        handleSplitDisplaying(item, index, arr),
+      )}
+    </td>
     <td>{item.quantity}</td>
     <td>{FormatPrice(item.price)}</td>
   </tr>
@@ -83,7 +98,7 @@ const Book = () => {
     await callAPI('api/book', 'GET', null).then((response) => {
       // get data from call api
       console.log('response la', response);
-      setBooks(response.data.data);
+      setBooks(response.data);
     });
   };
   return (
