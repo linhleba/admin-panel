@@ -102,11 +102,7 @@ const Table = (props) => {
         <table>
           {headData && renderHead ? (
             <thead>
-              <tr>
-                {headData.map((item, index) =>
-                  renderHead(item, index),
-                )}
-              </tr>
+              <tr>{headData.map((item, index) => renderHead(item, index))}</tr>
             </thead>
           ) : null}
           {allData && renderBody ? (
@@ -120,7 +116,7 @@ const Table = (props) => {
         <Pagination
           color="primary"
           count={range.length}
-          onChange={(event, page) => selectPage(page)}
+          onChange={(event, page) => selectPage(page - 1)}
         />
       ) : null}
     </div>

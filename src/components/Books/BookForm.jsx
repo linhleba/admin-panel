@@ -44,6 +44,7 @@ const initialFValues = {
   categories: [],
   authors: [],
   quantity: '10',
+  displayPrice: '',
   price: '',
   description: '',
 };
@@ -75,6 +76,11 @@ const BookForm = (props) => {
       temp.price = fieldValues.price ? '' : 'Trường này không được để trống.';
       temp.price = fieldValues.price > 0 ? '' : 'Giá là số nguyên dương.';
     }
+    if ('displayPrice' in fieldValues) {
+      temp.displayPrice = fieldValues.displayPrice
+        ? ''
+        : 'Trường này không được để trống.';
+    }
     if ('description' in fieldValues)
       temp.description = fieldValues.description
         ? ''
@@ -99,22 +105,14 @@ const BookForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // handle price value first
+    values.price = parseInt(values.displayPrice.replace(/\D/g, ''), 10);
     if (validate()) {
       // addOrEdit(values, resetForm);
       // handle posts
       handleInfo(values, resetForm);
     }
   };
-  useEffect(() => {
-    values.price = FormatPrice(values.price);
-  }, [values.price]);
-
-  //   useEffect(() => {
-  //     if (recordForEdit != null)
-  //       setValues({
-  //         ...recordForEdit,
-  //       });
-  //   }, [recordForEdit]);
 
   let [categoriesItems, setCategoriesItems] = useState([]);
   let [authorsItems, setAuthorsItems] = useState([]);
@@ -217,14 +215,14 @@ const BookForm = (props) => {
         <Grid item xs={6}>
           <div>
             <Controls.Input
-              name="price"
+              name="displayPrice"
               label="Giá"
-              value={values.price}
+              value={values.displayPrice}
               // InputProps={{
               //   inputComponent: NumberFormatCustom,
               // }}
               onChange={handleInputPrice}
-              error={errors.price}
+              error={errors.displayPrice}
             />
             <Controls.Input
               name="description"
