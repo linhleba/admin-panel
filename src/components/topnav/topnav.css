@@ -60,5 +60,6 @@
 }
 .top-nav__right-user__name {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 800;
+  margin: 5px;
 }
