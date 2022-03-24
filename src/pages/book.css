@@ -6,3 +6,16 @@
   /* margin-left: auto; */
   /* right: 0; */
 }
+.wrappedTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  background-color: var(--main-color);
+  color: white;
+  text-align: center;
+  max-width: 60px;
+  max-height: 60px;
+  padding: 10px;
+  margin: 20px;
+}

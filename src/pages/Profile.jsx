@@ -8,11 +8,12 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import callAPI from '../utils/apiCaller';
 import Axios from 'axios';
 import './profile.css';
+import * as ImageConfig from '../constants/ImageConfig';
 
-const URL_UPLOAD_IMAGE =
-  'http://api.cloudinary.com/v1_1/dr6oretlc/image/upload';
+// const URL_UPLOAD_IMAGE =
+//   'http://api.cloudinary.com/v1_1/dr6oretlc/image/upload';
 
-const NAME_UPLOAD_PRESET = 'avatarprofile';
+// const NAME_UPLOAD_PRESET = 'avatarprofile';
 const Profile = () => {
   const dispatch = useDispatch();
   const [initialFValues, setInitialFValues] = useState({
@@ -71,6 +72,19 @@ const Profile = () => {
       });
     }
   };
+  const uploadImage = (file) => {
+    const formData = new FormData();
+    formData.append('file', file[0]);
+
+    formData.append('upload_preset', ImageConfig.NAME_UPLOAD_PRESET);
+
+    Axios.post(ImageConfig.URL_UPLOAD_IMAGE, formData).then((res) => {
+      setValues({
+        ...values,
+        ['photo']: res.data.url,
+      });
+    });
+  };
 
   useEffect(async () => {
     await callAPI('api/account/info', 'get', null).then((res) => {
@@ -84,20 +98,6 @@ const Profile = () => {
       });
     });
   }, []);
-
-  const uploadImage = (file) => {
-    const formData = new FormData();
-    formData.append('file', file[0]);
-
-    formData.append('upload_preset', NAME_UPLOAD_PRESET);
-
-    Axios.post(URL_UPLOAD_IMAGE, formData).then((res) => {
-      setValues({
-        ...values,
-        ['photo']: res.data.url,
-      });
-    });
-  };
 
   return (
     <Form onSubmit={handleSubmit}>
