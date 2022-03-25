@@ -245,7 +245,7 @@ const Login = ({ setToken }) => {
               </Button>
             )}
             onSuccess={googleSuccess}
-            onFailure={googleError}
+            onFailure={(err) => console.log('fail', err)}
             cookiePolicy="single_host_origin"
           />
           <Grid container justify="flex-end">
