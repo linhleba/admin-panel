@@ -37,7 +37,17 @@ const OrderTable = (props) => {
     }
 
     const renderTransDetail = (transDetails) => {
-        return (transDetails.map(eachDetail => <OrderDetail {...eachDetail}/>))
+        let price_total = 0;
+        transDetails.forEach(element => {
+            price_total += element.price_total;
+        });
+        return (<div>
+            {transDetails.map(eachDetail => <OrderDetail {...eachDetail}/>)}
+            <div style={{
+                display:"flex",
+                justifyContent:"flex-end"
+            }}>{`Tổng tiền: ${price_total}`}</div>
+        </div>)
     }
 
     return (
