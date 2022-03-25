@@ -1,31 +1,45 @@
 import React, { useEffect, useState } from 'react'
+import Button from '../controls/Button.jsx';
+import PopUp from '../popup/PopUp.jsx';
 import Table from '../table/Table.jsx'
-
-const renderHead = (item, index) => <th key={index}> {item} </th>
-
-const renderBody = (item, index) => {
-    const allItemProps = Object.values(item);
-
-    const renderRow = allItemProps.map(row => {
-        if(Array.isArray(row)){
-            let arrayName = row.map(ele => {
-                return <div style={{color: "#FF0000"}}>{ele.name}</div>
-            })
-            return (<td>{arrayName}</td>)
-        }
-        else
-            return (<td>{`${row}`}</td>)
-    })
-
-    return (
-        <tr key={index}>
-            {renderRow}
-        </tr>
-    )
-}
+import OrderDetail from './OrderDetail.jsx';
 
 const OrderTable = (props) => {
     const { tableData, tableHeader } = props;
+    const [ openPopup, setOpenPopup ] = useState(false);
+    const [ currentTransDetail, setCurTranDetail] = useState([])
+
+    const renderHead = (item, index) => <th key={index}> {item} </th>
+
+    const renderBody = (item, index) => {
+        const allItemProps = Object.values(item);
+
+        const renderRow = allItemProps.map(row => {
+            if(Array.isArray(row)){
+                return (
+                    <td>
+                        <Button
+                            text={`Chi tiết`}
+                            size="small"
+                            onClick={() => {
+                                setCurTranDetail(row)
+                                setOpenPopup(true)
+                            }}
+                        />
+                    </td>
+                )
+            }
+            else
+                return (<td>{`${row}`}</td>)
+        })
+
+            return (<tr key={index}> {renderRow} </tr>)
+    }
+
+    const renderTransDetail = (transDetails) => {
+        return (transDetails.map(eachDetail => <OrderDetail {...eachDetail}/>))
+    }
+
     return (
         <div>
             <Table
@@ -35,6 +49,14 @@ const OrderTable = (props) => {
                 bodyData={tableData}
                 renderBody={(item, index) => renderBody(item, index)}
             />
+
+            <PopUp
+                title="Chi tiết hóa đơn"
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+            >
+                {renderTransDetail(currentTransDetail)}
+            </PopUp>
         </div>
     )
 }
