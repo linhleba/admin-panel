@@ -87,7 +87,11 @@ const Profile = () => {
   };
 
   useEffect(async () => {
-    await callAPI('api/account/info', 'get', null).then((res) => {
+    let profile = localStorage.getItem('profile');
+    let access_jwt_token = JSON.parse(profile).access_jwt_token;
+    await callAPI('api/account/info', 'get', null, {
+      authorization: access_jwt_token,
+    }).then((res) => {
       setValues({
         username: res.data.username,
         name: res.data.name ? res.data.name : '',
