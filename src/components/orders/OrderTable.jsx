@@ -33,7 +33,7 @@ const OrderTable = (props) => {
                 return (<td>{`${row}`}</td>)
         })
 
-            return (<tr key={index}> {renderRow} </tr>)
+        return (<tr key={index}> {renderRow} </tr>)
     }
 
     const renderTransDetail = (transDetails) => {
