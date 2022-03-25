@@ -24,6 +24,7 @@ import { signIn, signUp } from '../../components/redux/actions/auth';
 import { useHistory } from 'react-router-dom';
 import * as api from '../../api/index';
 import { setSnackbar } from '../redux/ducks/snackbar';
+// require('dotenv').config();
 
 const loginUser = async (credentials) => {
   let res;
@@ -123,7 +124,6 @@ const Login = ({ setToken }) => {
       const profile = localStorage.getItem('profile');
       const token = JSON.parse(profile).token;
       const profileData = JSON.parse(profile).result;
-      console.log('token is', token);
       let isExistedAccount = null;
       await callAPI('api/account/loginGoogle', 'post', { token: token }).then(
         (res) => {
@@ -137,9 +137,9 @@ const Login = ({ setToken }) => {
           password: profileData.email + 'ToLiShop',
           photo: profileData.imageUrl,
           name: profileData.name,
+          email: profileData.email,
         };
         const { data } = await api.signUp(payload);
-        console.log('du lieu sign up', data);
       }
       // handle login
       const { data } = await api.signIn({
