@@ -6,7 +6,7 @@ import Controls from '../components/controls/Controls';
 import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../components/redux/ducks/snackbar';
 import './user.css';
-import BookForm from '../components/forms/Books/BookForm';
+import UserForm from '../components/Users/UserForm';
 import PopUp from '../components/popup/PopUp';
 
 const customerTableHead = [
@@ -58,11 +58,13 @@ const User = () => {
     return data;
   };
 
+  let profile = localStorage.getItem('profile');
+  let access_jwt_token = JSON.parse(profile).access_jwt_token;
+
   const saveChangeRole = async (index, item) => {
     if (index === editingRow) {
       // handle axios with username and value
-      let profile = localStorage.getItem('profile');
-      let access_jwt_token = JSON.parse(profile).access_jwt_token;
+
       await callAPI(
         `api/account/setRole/${userName}`,
         'put',
@@ -82,7 +84,9 @@ const User = () => {
         }
       });
       // call again api to update data
-      await callAPI('api/account/getall', 'GET').then((response) => {
+      await callAPI('api/account/getall', 'GET', {
+        authorization: access_jwt_token,
+      }).then((response) => {
         // get data from call api
         setUsers(response.data);
 
@@ -99,8 +103,34 @@ const User = () => {
     console.log(data.type);
   };
 
-  const handleInfo = async (dataBooks, resetForm) => {
+  const handleInfo = async (dataUser, resetForm) => {
     console.log('update');
+    const payload = {
+      username: dataUser.username,
+      type: dataUser.role,
+      password: dataUser.password,
+      photo: dataUser.photo,
+      name: dataUser.name,
+      telephone: dataUser.phone,
+      address: dataUser.address,
+      email: dataUser.email,
+    };
+    await callAPI('api/account/create', 'post', payload).then((res) => {
+      if (res.status === 200) {
+        dispatch(setSnackbar(true, 'success', 'Tạo mới thành công!'));
+        resetForm();
+      } else {
+        dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
+      }
+    });
+    await callAPI('api/account/getall', 'GET', {
+      authorization: access_jwt_token,
+    }).then((response) => {
+      // get data from call api
+      setUsers(response.data);
+
+      // console.log('hehe', response);
+    });
   };
   const renderBody = (item, index) => (
     <tr key={index} onClick={() => handleRowClick(item)}>
@@ -192,11 +222,11 @@ const User = () => {
                 </div>
               }
               <PopUp
-                title="Thêm sản phẩm"
+                title="Thêm người dùng"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
               >
-                <BookForm handleInfo={handleInfo} />
+                <UserForm handleInfo={handleInfo} />
               </PopUp>
               {users && (
                 <Table

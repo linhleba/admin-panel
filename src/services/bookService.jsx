@@ -51,3 +51,34 @@ export const postAuthorAPI = async (item) => {
   });
   return responseData;
 };
+
+export const updateBookAPI = async (book, bookId) => {
+  let responseStatus;
+  let category_ids = [];
+  book.categories.map((item) => {
+    category_ids.push(item.id);
+  });
+  let author_ids = [];
+  book.authors.map((item) => {
+    author_ids.push(item.id);
+  });
+  const payload = {
+    name: book.name,
+    description: book.description,
+    quantity: book.quantity,
+    price: book.price,
+    category_id: category_ids,
+    author_id: author_ids,
+    image_url: book.photo,
+  };
+  await callAPI(`api/book/${bookId}`, 'PUT', payload).then((response) => {
+    console.log(bookId);
+    console.log(response);
+    responseStatus = response.status;
+    // return response;
+    // get data from call api
+    // setBooks(response.data);
+  });
+  // console.log('responseStatus', responseStatus);
+  return responseStatus;
+};
