@@ -28,14 +28,17 @@ const renderUserToggle = (user) => (
     <div className="top-nav__right-user__image">
       <img src={user.image} alt="User Image" />
     </div>
-    <div className="top-nav__right-user__name">{user.display_name}</div>
   </div>
 );
 
 const TopNav = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   useEffect(async () => {
-    await callAPI('api/account/info', 'get', null).then((res) => {
+    let profile = localStorage.getItem('profile');
+    let access_jwt_token = JSON.parse(profile).access_jwt_token;
+    await callAPI('api/account/info', 'get', null, {
+      authorization: access_jwt_token,
+    }).then((res) => {
       setCurrentUser({
         display_name: res.data.username,
         image: res.data.photo
@@ -43,7 +46,7 @@ const TopNav = (props) => {
           : 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
       });
     });
-    console.log('abcd', currentUser);
+    // console.log('abcd', currentUser);
   }, []);
 
   const dispatch = useDispatch();
