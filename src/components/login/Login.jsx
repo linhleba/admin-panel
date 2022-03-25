@@ -73,7 +73,7 @@ const Login = ({ setToken }) => {
       // dispatch(signUp(form, history));
       if (form.password === form.confirmPassword) {
         const { data } = await api.signUp(form);
-        console.log(data);
+        // console.log(data);
         if (!data) {
           dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra'));
         } else {
@@ -112,13 +112,59 @@ const Login = ({ setToken }) => {
   const googleSuccess = async (res) => {
     const result = res?.profileObj;
     const token = res?.tokenId;
-    const data = {
+    const googleData = {
       result,
       token,
     };
 
     try {
-      dispatch(authenticate(data));
+      dispatch(authenticate(googleData));
+
+      const profile = localStorage.getItem('profile');
+      const token = JSON.parse(profile).token;
+      const profileData = JSON.parse(profile).result;
+      console.log('token is', token);
+      let isExistedAccount = null;
+      await callAPI('api/account/loginGoogle', 'post', { token: token }).then(
+        (res) => {
+          // console.log(res);
+          isExistedAccount = res.isExistedAccount;
+        },
+      );
+      if (!isExistedAccount) {
+        const payload = {
+          username: profileData.googleId,
+          password: profileData.email + 'ToLiShop',
+          photo: profileData.imageUrl,
+          name: profileData.name,
+        };
+        const { data } = await api.signUp(payload);
+        console.log('du lieu sign up', data);
+      }
+      // handle login
+      const { data } = await api.signIn({
+        username: profileData.googleId,
+        password: profileData.email + 'ToLiShop',
+      });
+      setToken(data.access_jwt_token);
+      dispatch(authenticate({ access_jwt_token: data.access_jwt_token }));
+
+      // sign up data in database
+      // const { res } = await api.signUp(form);
+      // // console.log(res);
+      // if (!res) {
+      //   dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra'));
+      // } else {
+      //   // account is exsited
+      //   if (res.message != 'successfully created') {
+      //     dispatch(setSnackbar(true, 'error', 'Tên đăng nhập đã tồn tại!'));
+      //   } else {
+      //     const { res } = await api.signIn(form);
+      //     setToken(res.access_jwt_token);
+      //     dispatch(authenticate({ access_jwt_token: res.access_jwt_token }));
+      //   }
+      // }
+
       // history.push('/');
     } catch (error) {
       console.log(error);

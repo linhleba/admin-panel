@@ -1,5 +1,5 @@
 import './topnav.css';
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import DropDown from '../dropdown/dropdown';
 import notifications from '../../assets/JsonData/notification.json';
 import user_menus from '../../assets/JsonData/user_menus.json';
@@ -7,7 +7,10 @@ import { Link } from 'react-router-dom';
 import ThemeMenu from '../thememenu/ThemeMenu';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../components/redux/ducks/auth';
+import callAPI from '../../utils/apiCaller';
 
+const USER_BLANK_IMAGE =
+  'https://cdn-icons-png.flaticon.com/512/149/149071.png';
 const displayNotificationData = (object, index) => (
   <div key={index} className="notification-item">
     <i className={object.icon}></i>
@@ -15,11 +18,11 @@ const displayNotificationData = (object, index) => (
   </div>
 );
 
-const current_user = {
-  display_name: 'Admin',
-  image:
-    'https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg',
-};
+// const current_user = {
+//   display_name: 'Admin',
+//   image:
+//     'https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg',
+// };
 const renderUserToggle = (user) => (
   <div className="top-nav__right-user">
     <div className="top-nav__right-user__image">
@@ -30,6 +33,19 @@ const renderUserToggle = (user) => (
 );
 
 const TopNav = (props) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(async () => {
+    await callAPI('api/account/info', 'get', null).then((res) => {
+      setCurrentUser({
+        display_name: res.data.username,
+        image: res.data.photo
+          ? res.data.photo
+          : 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+      });
+    });
+    console.log('abcd', currentUser);
+  }, []);
+
   const dispatch = useDispatch();
 
   const handleLogOut = () => {
@@ -64,11 +80,13 @@ const TopNav = (props) => {
       <div className="top-nav__right">
         <div className="top-nav__right-item">
           {/* User and avatar section */}
-          <DropDown
-            customToggle={() => renderUserToggle(current_user)}
-            dataContent={user_menus}
-            renderItems={(object, index) => displayUserData(object, index)}
-          />
+          {currentUser && (
+            <DropDown
+              customToggle={() => renderUserToggle(currentUser)}
+              dataContent={user_menus}
+              renderItems={(object, index) => displayUserData(object, index)}
+            />
+          )}
         </div>
         <div className="top-nav__right-item">
           {/* Notification  */}

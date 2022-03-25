@@ -7,29 +7,42 @@ import * as BookService from '../services/bookService';
 import FormatPrice from '../utils/formatPrice/formatPrice';
 import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../components/redux/ducks/snackbar';
+import Controls from '../components/controls/Controls';
 import './book.css';
 
 const bookTableHead = [
-  'Id',
+  '',
   'Tên sách',
   'Thể loại',
   'Tác giả',
   'Số lượng',
   'Giá',
+  'Hành động',
 ];
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
 
 const handleSplitDisplaying = (item, index, arr) => {
-  if (arr.length - 1 === index) {
-    return item.name;
-  }
-  return `${item.name}, `;
+  // if (arr.length - 1 === index) {
+  //   return item.name;
+  // }
+  // return `${item.name}, `;
+  return <div className="wrappedTag"> {item.name}</div>;
 };
 
 const renderBody = (item, index) => (
   <tr key={index}>
-    <td>{item.id}</td>
+    <td>
+      {item.image_url ? (
+        <img src={item.image_url} alt="Album Art" className="userImage" />
+      ) : (
+        <img
+          src="https://vnpi-hcm.vn/wp-content/uploads/2018/01/no-image-800x600.png"
+          alt="Album Art"
+          className="userImage"
+        />
+      )}
+    </td>
     <td>{item.name}</td>
     <td>
       {item.category.map((item, index, arr) =>
@@ -43,6 +56,9 @@ const renderBody = (item, index) => (
     </td>
     <td>{item.quantity}</td>
     <td>{FormatPrice(item.price)}</td>
+    <td>
+      {<Controls.Button text="Xem chi tiết" size="small" onClick={() => {}} />}
+    </td>
   </tr>
 );
 

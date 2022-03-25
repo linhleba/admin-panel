@@ -1,0 +1,27 @@
+input[type='file'] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-left: 7px;
+}
+#file-upload {
+  margin-left: 7px;
+}
+.btn-submit {
+  display: flex;
+}
+.author {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.photo-book-info {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  /* align-items: center; */
+  flex-direction: column;
+}
