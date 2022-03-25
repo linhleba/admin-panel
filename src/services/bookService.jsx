@@ -17,6 +17,7 @@ export const postBookAPI = async (book) => {
     price: book.price,
     category_id: category_ids,
     author_id: author_ids,
+    image_url: book.photo,
   };
   await callAPI('api/book', 'POST', payload).then((response) => {
     responseStatus = response.status;

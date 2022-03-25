@@ -9,6 +9,9 @@ import Creatable, { useCreatable } from 'react-select/creatable';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import FormatPrice from '../../utils/formatPrice/formatPrice';
+import Axios from 'axios';
+import * as ImageConfig from '../../constants/ImageConfig';
+import './bookform.css';
 
 const customStyles = {
   option: (provided, state) => ({
@@ -20,15 +23,15 @@ const customStyles = {
   }),
   menu: (styles) => ({
     ...styles,
-    width: '300px',
-    margin: '0px 10px',
+    width: '353px',
+    margin: '0px 7px',
     zIndex: 9999,
   }),
   control: (styles) => ({
     // none of react-select's styles are passed to <Control />
     ...styles,
-    width: '300px',
-    margin: '10px 10px',
+    width: '353px',
+    margin: '10px 8px',
     minHeight: '50px',
     // width: 50,
   }),
@@ -44,8 +47,10 @@ const initialFValues = {
   categories: [],
   authors: [],
   quantity: '10',
+  displayPrice: '',
   price: '',
   description: '',
+  photo: '',
 };
 
 const BookForm = (props) => {
@@ -75,6 +80,11 @@ const BookForm = (props) => {
       temp.price = fieldValues.price ? '' : 'Trường này không được để trống.';
       temp.price = fieldValues.price > 0 ? '' : 'Giá là số nguyên dương.';
     }
+    if ('displayPrice' in fieldValues) {
+      temp.displayPrice = fieldValues.displayPrice
+        ? ''
+        : 'Trường này không được để trống.';
+    }
     if ('description' in fieldValues)
       temp.description = fieldValues.description
         ? ''
@@ -99,22 +109,14 @@ const BookForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // handle price value first
+    values.price = parseInt(values.displayPrice.replace(/\D/g, ''), 10);
     if (validate()) {
       // addOrEdit(values, resetForm);
       // handle posts
       handleInfo(values, resetForm);
     }
   };
-  useEffect(() => {
-    values.price = FormatPrice(values.price);
-  }, [values.price]);
-
-  //   useEffect(() => {
-  //     if (recordForEdit != null)
-  //       setValues({
-  //         ...recordForEdit,
-  //       });
-  //   }, [recordForEdit]);
 
   let [categoriesItems, setCategoriesItems] = useState([]);
   let [authorsItems, setAuthorsItems] = useState([]);
@@ -158,6 +160,20 @@ const BookForm = (props) => {
     onChange: PropTypes.func.isRequired,
   };
 
+  const uploadImage = (file) => {
+    const formData = new FormData();
+    formData.append('file', file[0]);
+
+    formData.append('upload_preset', ImageConfig.NAME_UPLOAD_PRESET);
+
+    Axios.post(ImageConfig.URL_UPLOAD_IMAGE, formData).then((res) => {
+      setValues({
+        ...values,
+        ['photo']: res.data.url,
+      });
+    });
+  };
+
   return (
     // onsubmit
 
@@ -189,6 +205,7 @@ const BookForm = (props) => {
             styles={customStyles}
           />
           <Creatable
+            className="author"
             isMulti
             name="authors"
             placeholder="Tác giả"
@@ -205,26 +222,54 @@ const BookForm = (props) => {
             onChange={handleCreatableInput}
             styles={customStyles}
           />
-          <Controls.Input
-            name="quantity"
-            label="Số lượng"
-            value={values.quantity}
-            type="number"
-            onChange={handleInputChange}
-            error={errors.quantity}
+          <label for="file-upload" class="custom-file-upload">
+            <i class="fa fa-cloud-upload"></i> Tải ảnh lên
+          </label>
+          <input
+            id="file-upload"
+            name="photo"
+            type="file"
+            label="Ảnh sách"
+            // value={values.photo}
+            onChange={(e) => uploadImage(e.target.files)}
+            // error={errors.address}
           />
+
+          <div className="photo-book-info">
+            {values.photo ? (
+              <img
+                src={values.photo}
+                alt="Album Art"
+                className="userImageInfo"
+              />
+            ) : (
+              <img
+                src="https://vnpi-hcm.vn/wp-content/uploads/2018/01/no-image-800x600.png"
+                alt="Album Art"
+                className="userImageInfo"
+              />
+            )}
+          </div>
         </Grid>
         <Grid item xs={6}>
           <div>
             <Controls.Input
-              name="price"
+              name="quantity"
+              label="Số lượng"
+              value={values.quantity}
+              type="number"
+              onChange={handleInputChange}
+              error={errors.quantity}
+            />
+            <Controls.Input
+              name="displayPrice"
               label="Giá"
-              value={values.price}
+              value={values.displayPrice}
               // InputProps={{
               //   inputComponent: NumberFormatCustom,
               // }}
               onChange={handleInputPrice}
-              error={errors.price}
+              error={errors.displayPrice}
             />
             <Controls.Input
               name="description"
@@ -235,9 +280,13 @@ const BookForm = (props) => {
               onChange={handleInputChange}
               error={errors.description}
             />
+            <Controls.Button type="submit" text="Đồng ý" />
+            <Controls.Button
+              text="Đặt lại"
+              color="default"
+              onClick={resetForm}
+            />
           </div>
-          <Controls.Button type="submit" text="Đồng ý" />
-          <Controls.Button text="Đặt lại" color="default" onClick={resetForm} />
         </Grid>
       </Grid>
     </Form>
