@@ -1,51 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import statusCardData from '../assets/JsonData/status-card-data.json';
 import StatusCard from '../components/statuscard/StatusCard';
 import Chart from 'react-apexcharts';
 import { Link } from 'react-router-dom';
 import Table from '../components/table/Table';
 import Badge from '../components/badge/Badge';
-
-const topCustomers = {
-  head: ['user', 'total orders', 'total spending'],
-  body: [
-    {
-      username: 'john doe',
-      order: '490',
-      price: '$15,870',
-    },
-    {
-      username: 'frank iva',
-      order: '250',
-      price: '$12,251',
-    },
-    {
-      username: 'anthony baker',
-      order: '120',
-      price: '$10,840',
-    },
-    {
-      username: 'frank iva',
-      order: '110',
-      price: '$9,251',
-    },
-    {
-      username: 'anthony baker',
-      order: '80',
-      price: '$8,840',
-    },
-  ],
-};
-
-const renderCustomerHead = (item, index) => <th key={index}>{item}</th>;
-
-const renderCustomerBody = (item, index) => (
-  <tr key={index}>
-    <td>{item.username}</td>
-    <td>{item.order}</td>
-    <td>{item.price}</td>
-  </tr>
-);
+import callAPI from '../utils/apiCaller';
 
 const chartOptions = {
   series: [
@@ -154,6 +114,30 @@ const renderOrderBody = (item, index) => (
 );
 
 const Dashboard = () => {
+  const [dataTopUsers, setDataTopUsers] = useState(null);
+  useEffect(async () => {
+    await callAPI('api/transaction/topuser', 'get').then((res) => {
+      setDataTopUsers(res.data);
+      console.log('data user', res.data);
+      console.log('data user', dataTopUsers);
+    });
+  }, []);
+
+  const topCustomers = {
+    head: ['Tài khoản', 'Tổng đơn', 'Tổng chi tiêu'],
+    body: dataTopUsers,
+  };
+
+  const renderCustomerHead = (item, index) => <th key={index}>{item}</th>;
+
+  const renderCustomerBody = (item, index) => (
+    <tr key={index}>
+      <td>{item.username}</td>
+      <td>{item.orders_total}</td>
+      <td>{item.spending_total.toLocaleString()}</td>
+    </tr>
+  );
+
   return (
     <div>
       <h2 className="page-header">Trang chủ</h2>
@@ -192,12 +176,15 @@ const Dashboard = () => {
               <h3>Khách hàng tiềm năng</h3>
             </div>
             <div className="card-body">
-              <Table
-                headData={topCustomers.head}
-                bodyData={topCustomers.body}
-                renderHead={(obj, index) => renderCustomerHead(obj, index)}
-                renderBody={(obj, index) => renderCustomerBody(obj, index)}
-              />
+              {dataTopUsers && (
+                <Table
+                  limit="5"
+                  headData={topCustomers.head}
+                  bodyData={topCustomers.body}
+                  renderHead={(obj, index) => renderCustomerHead(obj, index)}
+                  renderBody={(obj, index) => renderCustomerBody(obj, index)}
+                />
+              )}
             </div>
             {/* <div className="card-footer">
               <Link to="/">View all</Link>
@@ -211,6 +198,7 @@ const Dashboard = () => {
             </div>
             <div className="card-body">
               <Table
+                limit="5"
                 headData={latestOrders.header}
                 bodyData={latestOrders.body}
                 renderHead={(obj, index) => renderOrderHead(obj, index)}
