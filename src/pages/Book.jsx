@@ -13,8 +13,8 @@ import './book.css';
 const bookTableHead = [
   '',
   'Tên sách',
-  'Thể loại',
-  'Tác giả',
+  // 'Thể loại',
+  // 'Tác giả',
   'Số lượng',
   'Giá',
   'Hành động',
@@ -27,24 +27,54 @@ const handleSplitDisplaying = (item, index, arr) => {
   //   return item.name;
   // }
   // return `${item.name}, `;
-  return <div className="wrappedTag"> {item.name}</div>;
+  const randomColor = ['black', 'green', 'yellow', 'blue'];
+  const rdNum = Math.random(0, 3);
+  console.log(rdNum);
+  // console.log(Math.random(0, 3));
+  return (
+    <Controls.Button
+      style={{ backgroundColor: randomColor[Math.floor(rdNum)] }}
+      text={item.name}
+      size="small"
+      onClick={() => {}}
+    />
+  );
 };
 
-const renderBody = (item, index) => (
-  <tr key={index}>
-    <td>
-      {item.image_url ? (
-        <img src={item.image_url} alt="Album Art" className="userImage" />
-      ) : (
-        <img
-          src="https://vnpi-hcm.vn/wp-content/uploads/2018/01/no-image-800x600.png"
-          alt="Album Art"
-          className="userImage"
-        />
-      )}
-    </td>
-    <td>{item.name}</td>
-    <td>
+const Book = () => {
+  const dispatch = useDispatch();
+  let [books, setBooks] = useState(undefined);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [openEditPopup, setOpenEditPopup] = useState(false);
+  const openInPopup = (item) => {
+    setOpenPopup(true);
+  };
+
+  const [textDisplayPopup, setTextDisplayPopup] = useState(null);
+  const [dataBookView, setDataBookView] = useState(null);
+
+  const handleViewDetail = (item) => {
+    console.log(item);
+    setOpenPopup(true);
+    setTextDisplayPopup('Chi tiết sản phẩm');
+    setDataBookView(item);
+  };
+
+  const renderBody = (item, index) => (
+    <tr key={index}>
+      <td>
+        {item.image_url ? (
+          <img src={item.image_url} alt="Album Art" className="userImage" />
+        ) : (
+          <img
+            src="https://vnpi-hcm.vn/wp-content/uploads/2018/01/no-image-800x600.png"
+            alt="Album Art"
+            className="userImage"
+          />
+        )}
+      </td>
+      <td>{item.name}</td>
+      {/* <td>
       {item.category.map((item, index, arr) =>
         handleSplitDisplaying(item, index, arr),
       )}
@@ -53,22 +83,21 @@ const renderBody = (item, index) => (
       {item.author.map((item, index, arr) =>
         handleSplitDisplaying(item, index, arr),
       )}
-    </td>
-    <td>{item.quantity}</td>
-    <td>{FormatPrice(item.price)}</td>
-    <td>
-      {<Controls.Button text="Xem chi tiết" size="small" onClick={() => {}} />}
-    </td>
-  </tr>
-);
+    </td> */}
+      <td>{item.quantity}</td>
+      <td>{item.price.toLocaleString()}</td>
+      <td>
+        {
+          <Controls.Button
+            text="Chi tiết"
+            size="small"
+            onClick={() => handleViewDetail(item)}
+          />
+        }
+      </td>
+    </tr>
+  );
 
-const Book = () => {
-  const dispatch = useDispatch();
-  let [books, setBooks] = useState(undefined);
-  const [openPopup, setOpenPopup] = useState(false);
-  const openInPopup = (item) => {
-    setOpenPopup(true);
-  };
   // Use useEffect to set it for displaying on the table
   useEffect(() => {
     // let mounted = true;
@@ -79,38 +108,62 @@ const Book = () => {
     // return () => (mounted = false);
   }, []);
 
-  const handleInfo = async (dataBooks, resetForm) => {
+  const handleInfo = async (dataBooks, resetForm, isEditForm) => {
     // if (books.id == 0) employeeService.insertEmployee(employee);
     // else employeeService.updateEmployee(employee);
     // Handle author and categories are not stored in the database
     //  handle await before continuing
-    await Promise.all(
-      dataBooks.categories.map(async (item) => {
-        if (item.id === undefined) {
-          item.id = await BookService.postCategoryAPI(item);
-        }
-      }),
-    );
+    if (!isEditForm) {
+      await Promise.all(
+        dataBooks.categories.map(async (item) => {
+          if (item.id === undefined) {
+            item.id = await BookService.postCategoryAPI(item);
+          }
+        }),
+      );
 
-    await Promise.all(
-      dataBooks.authors.map(async (item) => {
-        if (item.id === undefined) {
-          item.id = await BookService.postAuthorAPI(item);
-        }
-      }),
-    );
+      await Promise.all(
+        dataBooks.authors.map(async (item) => {
+          if (item.id === undefined) {
+            item.id = await BookService.postAuthorAPI(item);
+          }
+        }),
+      );
 
-    const result = await BookService.postBookAPI(dataBooks);
-    if (result == 200) {
-      // const dispatch = useDispatch();
-      // handle to display snackbar
-      // console.log('ket qua tra ve ben trong', result);
-      dispatch(setSnackbar(true, 'success', 'Cập nhật sách thành công!'));
+      const result = await BookService.postBookAPI(dataBooks);
+      if (result == 200) {
+        // const dispatch = useDispatch();
+        // handle to display snackbar
+        // console.log('ket qua tra ve ben trong', result);
+        dispatch(setSnackbar(true, 'success', 'Cập nhật sách thành công!'));
+      } else {
+        dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
+      }
+      resetForm();
+      // reset form after update books into data
     } else {
-      dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
+      const bookId = isEditForm.id;
+      const result = await BookService.updateBookAPI(dataBooks, bookId);
+      if (result == 200) {
+        // const dispatch = useDispatch();
+        // handle to display snackbar
+        // console.log('ket qua tra ve ben trong', result);
+        dispatch(setSnackbar(true, 'success', 'Cập nhật sách thành công!'));
+      } else {
+        dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
+      }
+      // payload = {
+      //   name: dataBooks.name,
+      //   description: dataBooks.description,
+      //   price: dataBooks.price,
+      //   quantity: dataBooks.quantity,
+      //   author_id: req.body.author_id,
+      //   category_id: req.body.category_id,
+      //   image_url: req.body.image_url,
+      // };
+      // await callAPI('api/book/${dataBooks.id}', 'put', null).then((res))
+      // console.log('edit form');
     }
-    // reset form after update books into data
-    resetForm();
     await callAPI('api/book', 'GET', null).then((response) => {
       // get data from call api
       console.log('response la', response);
@@ -129,7 +182,9 @@ const Book = () => {
                   <button
                     className="table__button-add"
                     onClick={() => {
+                      setTextDisplayPopup('Thêm sản phẩm');
                       setOpenPopup(true);
+                      setDataBookView(null);
                     }}
                   >
                     Thêm
@@ -138,12 +193,13 @@ const Book = () => {
               }
 
               <PopUp
-                title="Thêm sản phẩm"
+                title={textDisplayPopup}
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
               >
-                <BookForm handleInfo={handleInfo} />
+                <BookForm handleInfo={handleInfo} dataBooks={dataBookView} />
               </PopUp>
+
               {books && (
                 <Table
                   limit="10"

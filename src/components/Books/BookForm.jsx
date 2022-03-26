@@ -42,19 +42,36 @@ const customStyles = {
   // },
 };
 
-const initialFValues = {
-  name: '',
-  categories: [],
-  authors: [],
-  quantity: '10',
-  displayPrice: '',
-  price: '',
-  description: '',
-  photo: '',
-};
-
 const BookForm = (props) => {
-  const { handleInfo } = props;
+  const { dataBooks, handleInfo } = props;
+  // const [isAddingForm, setIsAddingForm] = useState(null);
+  let initialFValues;
+  if (dataBooks) {
+    console.log(dataBooks);
+    initialFValues = {
+      name: dataBooks.name,
+      categories: dataBooks.category,
+      authors: dataBooks.author,
+      quantity: dataBooks.quantity,
+      displayPrice: dataBooks.price.toLocaleString(),
+      price: '',
+      description: dataBooks.description,
+      photo: dataBooks.image_url,
+    };
+    // setIsAddingForm(false);
+  } else {
+    initialFValues = {
+      name: '',
+      categories: [],
+      authors: [],
+      quantity: '10',
+      displayPrice: '',
+      price: '',
+      description: '',
+      photo: '',
+    };
+    // setIsAddingForm(true);
+  }
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ('name' in fieldValues)
@@ -114,7 +131,7 @@ const BookForm = (props) => {
     if (validate()) {
       // addOrEdit(values, resetForm);
       // handle posts
-      handleInfo(values, resetForm);
+      handleInfo(values, resetForm, dataBooks);
     }
   };
 

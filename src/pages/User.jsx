@@ -6,6 +6,8 @@ import Controls from '../components/controls/Controls';
 import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../components/redux/ducks/snackbar';
 import './user.css';
+import UserForm from '../components/Users/UserForm';
+import PopUp from '../components/popup/PopUp';
 
 const customerTableHead = [
   'Người dùng',
@@ -28,6 +30,10 @@ const handleRole = (typeOfRole) => {
 };
 
 const User = () => {
+  const [openPopup, setOpenPopup] = useState(false);
+  const openInPopup = (item) => {
+    setOpenPopup(true);
+  };
   const dispatch = useDispatch();
   const [editingRow, setEditingRow] = useState(null);
   // useState in here for storing 2 values (username & role)
@@ -52,12 +58,21 @@ const User = () => {
     return data;
   };
 
+  let profile = localStorage.getItem('profile');
+  let access_jwt_token = JSON.parse(profile).access_jwt_token;
+
   const saveChangeRole = async (index, item) => {
     if (index === editingRow) {
       // handle axios with username and value
-      await callAPI(`api/account/setRole/${userName}`, 'put', {
-        type: role,
-      }).then((response) => {
+
+      await callAPI(
+        `api/account/setRole/${userName}`,
+        'put',
+        {
+          type: role,
+        },
+        { authorization: access_jwt_token },
+      ).then((response) => {
         console.log(response);
         if (response.status == 200) {
           // const dispatch = useDispatch();
@@ -69,7 +84,9 @@ const User = () => {
         }
       });
       // call again api to update data
-      await callAPI('api/account/getall', 'GET').then((response) => {
+      await callAPI('api/account/getall', 'GET', {
+        authorization: access_jwt_token,
+      }).then((response) => {
         // get data from call api
         setUsers(response.data);
 
@@ -86,6 +103,35 @@ const User = () => {
     console.log(data.type);
   };
 
+  const handleInfo = async (dataUser, resetForm) => {
+    console.log('update');
+    const payload = {
+      username: dataUser.username,
+      type: dataUser.role,
+      password: dataUser.password,
+      photo: dataUser.photo,
+      name: dataUser.name,
+      telephone: dataUser.phone,
+      address: dataUser.address,
+      email: dataUser.email,
+    };
+    await callAPI('api/account/create', 'post', payload).then((res) => {
+      if (res.status === 200) {
+        dispatch(setSnackbar(true, 'success', 'Tạo mới thành công!'));
+        resetForm();
+      } else {
+        dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
+      }
+    });
+    await callAPI('api/account/getall', 'GET', {
+      authorization: access_jwt_token,
+    }).then((response) => {
+      // get data from call api
+      setUsers(response.data);
+
+      // console.log('hehe', response);
+    });
+  };
   const renderBody = (item, index) => (
     <tr key={index} onClick={() => handleRowClick(item)}>
       <td>
@@ -163,6 +209,25 @@ const User = () => {
         <div className="col-12">
           <div className="card">
             <div className="card__body">
+              {
+                <div className="table__button">
+                  <button
+                    className="table__button-add"
+                    onClick={() => {
+                      setOpenPopup(true);
+                    }}
+                  >
+                    Thêm
+                  </button>
+                </div>
+              }
+              <PopUp
+                title="Thêm người dùng"
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+              >
+                <UserForm handleInfo={handleInfo} />
+              </PopUp>
               {users && (
                 <Table
                   limit="10"
@@ -170,6 +235,7 @@ const User = () => {
                   renderHead={(item, index) => renderHead(item, index)}
                   bodyData={users}
                   renderBody={(item, index) => renderBody(item, index)}
+                  // isSearch="true"
                 />
               )}
             </div>
