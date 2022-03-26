@@ -156,7 +156,7 @@ const renderOrderBody = (item, index) => (
 const Dashboard = () => {
   return (
     <div>
-      <h2 className="page-header">Dashboard</h2>
+      <h2 className="page-header">Trang chủ</h2>
       <div className="row">
         <div className="col-6">
           <div className="row">
@@ -189,7 +189,7 @@ const Dashboard = () => {
         <div className="col-6">
           <div className="card">
             <div className="card-header">
-              <h3>Top Customers</h3>
+              <h3>Khách hàng tiềm năng</h3>
             </div>
             <div className="card-body">
               <Table
@@ -199,15 +199,15 @@ const Dashboard = () => {
                 renderBody={(obj, index) => renderCustomerBody(obj, index)}
               />
             </div>
-            <div className="card-footer">
+            {/* <div className="card-footer">
               <Link to="/">View all</Link>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="col-6">
           <div className="card">
             <div className="card-header">
-              <h3>Latest Orders</h3>
+              <h3>Giao dịch mới nhất</h3>
             </div>
             <div className="card-body">
               <Table
@@ -218,7 +218,7 @@ const Dashboard = () => {
               />
             </div>
             <div className="card-footer">
-              <Link to="/">View all</Link>
+              <Link to="/orders">Xem tất cả</Link>
             </div>
           </div>
         </div>

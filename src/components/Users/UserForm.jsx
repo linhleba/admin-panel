@@ -163,7 +163,7 @@ const UserForm = (props) => {
         <Grid item xs={6}>
           <Controls.Input
             name="username"
-            label="Tên người dùng"
+            label="Tên đăng nhập"
             value={values.username}
             onChange={handleInputChange}
             error={errors.username}
