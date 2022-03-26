@@ -84,7 +84,7 @@ const User = () => {
         }
       });
       // call again api to update data
-      await callAPI('api/account/getall', 'GET', {
+      await callAPI('api/account/getall', 'GET', null, {
         authorization: access_jwt_token,
       }).then((response) => {
         // get data from call api
@@ -123,7 +123,7 @@ const User = () => {
         dispatch(setSnackbar(true, 'error', 'Đã có lỗi xảy ra!'));
       }
     });
-    await callAPI('api/account/getall', 'GET', {
+    await callAPI('api/account/getall', 'GET', null, {
       authorization: access_jwt_token,
     }).then((response) => {
       // get data from call api
