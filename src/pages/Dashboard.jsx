@@ -95,12 +95,13 @@ const Dashboard = () => {
       ];
     });
     await callAPI('api/transaction/revenue-total').then((res) => {
-      console.log('revenue total', res);
       allData = [
         ...allData,
         {
           icon: 'bx bx-dollar-circle',
-          count: res.data[0].revenue_total.toLocaleString(),
+          count: res.data[0].revenue_total
+            ? res.data[0].revenue_total.toLocaleString()
+            : 0,
           title: 'Lợi nhuận',
         },
       ];
