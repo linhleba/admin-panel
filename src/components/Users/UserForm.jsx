@@ -120,8 +120,9 @@ const UserForm = (props) => {
       let profile = localStorage.getItem('profile');
       let access_jwt_token = JSON.parse(profile).access_jwt_token;
       let isExistedAccount = false;
+      const username = values.username;
       // handle to check account is existed or not
-      await callAPI(`api/account/getAccount/${values.username}`, 'get', null, {
+      await callAPI(`api/account/getAccount/${username}`, 'get', null, {
         authorization: access_jwt_token,
       }).then((res) => {
         // console.log(res);
@@ -162,7 +163,7 @@ const UserForm = (props) => {
         <Grid item xs={6}>
           <Controls.Input
             name="username"
-            label="Tên người dùng"
+            label="Tên đăng nhập"
             value={values.username}
             onChange={handleInputChange}
             error={errors.username}

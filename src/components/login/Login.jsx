@@ -199,7 +199,7 @@ const Login = ({ setToken }) => {
             )}
             <Input
               name="username"
-              label="Tên người dùng"
+              label="Tên đăng nhập"
               type="text"
               handleChange={handleChange}
             />

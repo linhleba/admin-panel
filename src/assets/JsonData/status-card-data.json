@@ -1,22 +1,22 @@
 [
-    {
-        "icon": "bx bx-shopping-bag",
-        "count": "1,995",
-        "title": "Total sales"
-    },
-    {
-        "icon": "bx bx-cart",
-        "count": "2,001",
-        "title": "Daily visits"
-    },
-    {
-        "icon": "bx bx-dollar-circle",
-        "count": "$2,632",
-        "title": "Total income"
-    },
-    {
-        "icon": "bx bx-receipt",
-        "count": "1,711",
-        "title": "Total orders"
-    }
+  {
+    "icon": "bx bx-shopping-bag",
+    "count": "15",
+    "title": "Đơn hàng"
+  },
+  {
+    "icon": "bx bx-user",
+    "count": "20",
+    "title": "Khách hàng"
+  },
+  {
+    "icon": "bx bx-dollar-circle",
+    "count": "2,632,999",
+    "title": "Lợi nhuận"
+  },
+  {
+    "icon": "bx bx-book",
+    "count": "1,711",
+    "title": "Cuốn sách"
+  }
 ]

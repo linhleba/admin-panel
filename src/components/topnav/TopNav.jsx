@@ -77,8 +77,8 @@ const TopNav = (props) => {
   return (
     <div className="top-nav">
       <div className="top-nav__search">
-        <input type="text" placeholder="Search here ..." />
-        <i className="bx bx-search"></i>
+        {/* <input type="text" placeholder="Search here ..." />
+        <i className="bx bx-search"></i> */}
       </div>
       <div className="top-nav__right">
         <div className="top-nav__right-item">

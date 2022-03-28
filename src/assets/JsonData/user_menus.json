@@ -5,7 +5,7 @@
     "url": "/profile"
   },
   {
-    "icon": "bx bx-pass",
+    "icon": "bx bx-lock",
     "content": "Đổi mật khẩu",
     "url": "/password"
   },
