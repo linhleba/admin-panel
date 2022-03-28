@@ -95,6 +95,7 @@ const Dashboard = () => {
       ];
     });
     await callAPI('api/transaction/revenue-total').then((res) => {
+      console.log('revenue total', res);
       allData = [
         ...allData,
         {
