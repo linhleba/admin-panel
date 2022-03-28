@@ -129,7 +129,11 @@ const Dashboard = () => {
 
   const [dataLatestOrders, setDataLatestOrders] = useState(null);
   useEffect(async () => {
-    await callAPI('api/transaction/latest').then((res) => {
+    let profile = localStorage.getItem('profile');
+    let access_jwt_token = JSON.parse(profile).access_jwt_token;
+    await callAPI('api/transaction/latest', 'get', null, {
+      authorization: access_jwt_token,
+    }).then((res) => {
       setDataLatestOrders(res.data);
     });
   }, []);
