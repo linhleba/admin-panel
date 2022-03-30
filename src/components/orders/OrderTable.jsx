@@ -3,6 +3,15 @@ import Button from '../controls/Button.jsx';
 import PopUp from '../popup/PopUp.jsx';
 import Table from '../table/Table.jsx'
 import OrderDetail from './OrderDetail.jsx';
+import Badge from '../badge/Badge';
+
+const orderStatus = {
+    1: 'primary',
+    0: 'warning',
+    'Đã giao': 'success',
+    'Hoàn tiền': 'danger',
+    'Chưa giao': 'warning'
+  };
 
 const OrderTable = (props) => {
     const { tableData, tableHeader } = props;
@@ -13,6 +22,10 @@ const OrderTable = (props) => {
 
     const renderBody = (item, index) => {
         const allItemProps = Object.values(item);
+
+        const checkIsStatus = (row) => {
+            return (row === "Đã giao" || row === "Chưa giao")
+        }
 
         const renderRow = allItemProps.map(row => {
             if(Array.isArray(row)){
@@ -29,6 +42,8 @@ const OrderTable = (props) => {
                     </td>
                 )
             }
+            else if (checkIsStatus(row))
+                return <td><div><Badge type={orderStatus[row]} content={row} /></div></td>
             else
                 return (<td>{`${row}`}</td>)
         })
