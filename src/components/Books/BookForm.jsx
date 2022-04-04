@@ -68,7 +68,8 @@ const BookForm = (props) => {
       displayPrice: '',
       price: '',
       description: '',
-      photo: '',
+      photo:
+        'https://vnpi-hcm.vn/wp-content/uploads/2018/01/no-image-800x600.png',
     };
     // setIsAddingForm(true);
   }
