@@ -1,1 +1,1 @@
-export const custom_host = 'undefined';
+export const custom_host = undefined;
