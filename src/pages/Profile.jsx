@@ -61,7 +61,11 @@ const Profile = () => {
         address: values.address,
         photo: values.photo,
       };
-      await callAPI('api/account/update', 'put', payload).then((res) => {
+      let profile = localStorage.getItem('profile');
+      let access_jwt_token = JSON.parse(profile).access_jwt_token;
+      await callAPI('api/account/update', 'put', payload, {
+        authorization: access_jwt_token,
+      }).then((res) => {
         if (res.status == 200) {
           dispatch(
             setSnackbar(true, 'success', 'Cập nhật thông tin thành công!'),
