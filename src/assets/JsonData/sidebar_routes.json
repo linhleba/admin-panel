@@ -36,7 +36,7 @@
   },
   {
     "display_name": "Cài đặt",
-    "route": "/settings",
+    "route": "/setting",
     "icon": "bx bx-cog"
   }
 ]

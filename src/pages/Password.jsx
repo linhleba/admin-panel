@@ -46,10 +46,19 @@ const Password = () => {
       if (values.newPass != values.reconfirmNewPass) {
         dispatch(setSnackbar(true, 'error', 'Mật khẩu mới không khớp!'));
       } else {
-        await callAPI('api/account/changepassword', 'put', {
-          password: values.oldPass,
-          newPassword: values.newPass,
-        }).then((res) => {
+        let profile = localStorage.getItem('profile');
+        let access_jwt_token = JSON.parse(profile).access_jwt_token;
+        await callAPI(
+          'api/account/changepassword',
+          'put',
+          {
+            password: values.oldPass,
+            newPassword: values.newPass,
+          },
+          {
+            authorization: access_jwt_token,
+          },
+        ).then((res) => {
           if (res.data.data) {
             // console.log(res);
             dispatch(

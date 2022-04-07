@@ -1,0 +1,19 @@
+.table__button-stop {
+  /* position: relative; */
+  display: inline-block;
+  /* left: 20px; */
+  background-color: red;
+  color: var(--txt-white);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  margin: 10px 20px;
+  right: 20px;
+  /* top: -60px; */
+  text-transform: capitalize;
+  font-size: inherit;
+  font-weight: 600;
+}
+.table__button-stop:hover {
+  background-color: red;
+  color: var(--txt-white);
+}
