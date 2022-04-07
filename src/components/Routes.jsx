@@ -7,6 +7,7 @@ import Profile from '../pages/Profile';
 import Password from '../pages/Password';
 import Login from '../components/login/Login';
 import Order from '../pages/order/Order';
+import Setting from '../pages/Setting';
 
 const Routes = () => {
   return (
@@ -16,7 +17,8 @@ const Routes = () => {
       <Route exact path="/books" component={Book} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/password" component={Password} />
-      <Route exact path="/orders" component={Order}/>
+      <Route exact path="/orders" component={Order} />
+      <Route exact path="/setting" component={Setting} />
     </Switch>
   );
 };
