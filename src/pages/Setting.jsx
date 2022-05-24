@@ -59,6 +59,20 @@ const Setting = () => {
       }
     }, 500);
   };
+
+  const handleFillUser = async () => {
+    for (let i = 0; i < 100; i++) {
+      let userPayload = {
+        username: `test${i}`,
+        password: `admin${i}`,
+      };
+      await callAPI('api/account/create', 'post', userPayload).then((res) => {
+        console.log(res);
+        // console.log(res);
+        // console.log(res.data.message);
+      });
+    }
+  };
   return (
     <div>
       <button
@@ -88,6 +102,19 @@ const Setting = () => {
         Dừng
       </button>
       <ProgressBar done={percent} />
+
+      <button
+        className="table__button-add"
+        onClick={() => {
+          // setInterval(() => {
+          //   setPercent((prevPercent) => prevPercent + 5);
+          //   console.log('percent', percent);
+          // }, 2000);
+          handleFillUser();
+        }}
+      >
+        Đổ Người dùng
+      </button>
     </div>
   );
 };
