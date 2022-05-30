@@ -6,11 +6,33 @@ import callAPI from '../utils/apiCaller';
 import './setting.css';
 import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../components/redux/ducks/snackbar';
+import Controls from '../components/controls/Controls';
+
+const customStyles = {
+  input: (styles) => ({
+    // none of react-select's styles are passed to <Control />
+    ...styles,
+    width: '900px',
+
+    // width: 50,
+  }),
+};
 
 const Setting = () => {
   const dispatch = useDispatch();
   const [percent, setPercent] = useState(0);
+  const [urlML, setURLML] = useState(null);
+  // const [valueURL, setValueURL] = useState(null);
   let i = percent * 10;
+
+  console.log('url ML is', urlML);
+  useEffect(() => {
+    callAPI('api/ML_API_URL', 'get').then((res) => {
+      console.log('res is', res);
+      res.data.result ? setURLML(res.data.result) : setURLML('null');
+    });
+  }, []);
+
   const handleFillData = async () => {
     let authorDic = await BookService.getAuthor();
     let categoryDic = await BookService.getCategory();
@@ -73,6 +95,18 @@ const Setting = () => {
       });
     }
   };
+
+  const handleSubmitURL = (urlML) => {
+    // alert('mlURL', urlML);
+
+    console.log('urlML is submit', urlML);
+    callAPI('api/ML_API_URL', 'post', {
+      mlURL: urlML,
+    }).then((res) => {
+      console.log('res la', res);
+      setURLML(res.data.result);
+    });
+  };
   return (
     <div>
       <button
@@ -114,6 +148,27 @@ const Setting = () => {
         }}
       >
         Đổ Người dùng
+      </button>
+
+      <div className="setting-ml">
+        <h1 style={{ color: 'grey', topMargin: '50px' }}>URL API ML</h1>
+        <Controls.Input
+          name="url"
+          // label="URL ML"
+          value={urlML}
+          onChange={(e) => {
+            setURLML(e.target.value);
+          }}
+          styles={customStyles}
+        ></Controls.Input>
+      </div>
+      <button
+        className="table__button-add"
+        onClick={() => {
+          handleSubmitURL(urlML);
+        }}
+      >
+        Lưu thay đổi
       </button>
     </div>
   );

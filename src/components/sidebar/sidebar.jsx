@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './sidebar.css';
-// import logo from '../../assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json';
 
-const logo = '';
+// const logo = '';
 const SidebarItem = (props) => {
   const active = props.active ? 'active' : '';
   return (

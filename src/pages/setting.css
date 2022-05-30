@@ -17,3 +17,6 @@
   background-color: red;
   color: var(--txt-white);
 }
+.MuiOutlinedInput-input {
+  width: 900px;
+}
